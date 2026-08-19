@@ -1,0 +1,2232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TAUSIF • Sales Command Center</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#080b12;--panel:#101520;--panel2:#151b28;--line:#252d3d;--text:#f5f7fb;--muted:#8d98aa;--accent:#7c5cff;--accent2:#21d4a4;--danger:#ff5c7a;--warn:#ffb454}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#27204d 0,#080b12 35%);color:var(--text);font:14px Inter,system-ui,Arial,sans-serif}.wrap{max-width:1550px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#7c5cff,#20d4a4);display:grid;place-items:center;font-weight:900;color:#fff}.title{font-size:25px;font-weight:850}.sub{color:var(--muted);font-size:12px;margin-top:3px}.btn{border:1px solid #343d50;background:#171d2a;color:#fff;padding:11px 15px;border-radius:10px;font-weight:750;cursor:pointer}.btn.primary{border:0;background:linear-gradient(135deg,#7657ff,#9a70ff)}input[type=file]{display:none}.upload{cursor:pointer}.status{padding:10px 13px;border:1px solid var(--line);background:#0e131d;border-radius:10px;color:var(--muted);margin-bottom:14px}.filters{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}.filter label{display:block;color:var(--muted);font-size:11px;margin:0 0 5px 2px}.filter select,.search{width:100%;background:#0f141f;border:1px solid var(--line);color:#fff;padding:10px;border-radius:9px;outline:none}.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:14px}.card{background:linear-gradient(180deg,#111722,#0e131d);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 10px 30px #0003}.metric .label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.metric .v{font-size:23px;font-weight:850;margin:8px 0 3px}.metric .delta{font-size:11px;color:var(--accent2)}.section{margin-bottom:14px}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.sectionhead h2{font-size:16px;margin:0}.sectionhead span{color:var(--muted);font-size:11px}.two{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}.tablewrap{overflow:auto;max-height:430px;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px 10px;border-bottom:1px solid #202736;white-space:nowrap;text-align:left}th{position:sticky;top:0;background:#151b27;color:#aeb7c7;z-index:2}td{color:#e7eaf0}.pill{padding:4px 7px;border-radius:999px;font-weight:800;font-size:10px}.good{background:#123b31;color:#5af0c4}.mid{background:#403318;color:#ffc66d}.bad{background:#421e29;color:#ff7f98}.barrow{display:grid;grid-template-columns:135px 1fr 52px;gap:8px;align-items:center;margin:12px 0}.bar{height:8px;background:#222a38;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#7657ff,#21d4a4);border-radius:9px}.alert{padding:10px;border-radius:10px;margin:8px 0;background:#151b27;border:1px solid var(--line)}.action-click{cursor:pointer;transition:.18s transform,.18s border-color}.action-click:hover{transform:translateY(-1px);border-color:#7657ff}.action-click:active{transform:translateY(0)}.alert b{display:block;margin-bottom:3px}.mini{color:var(--muted);font-size:11px}.hidden{display:none}.empty{color:var(--muted);padding:25px;text-align:center}@media(max-width:1100px){.filters{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(3,1fr)}.two,.three{grid-template-columns:1fr}}@media(max-width:600px){.wrap{padding:11px}.top{align-items:flex-start}.title{font-size:19px}.filters{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr 1fr}.metric .v{font-size:18px}.top .upload{font-size:0}.top .upload:after{content:"Upload";font-size:12px}}
+.leveltab{cursor:pointer;border:1px solid rgba(255,255,255,.10);background:#111522;color:#c9ceda;padding:10px 14px;border-radius:12px;font-weight:700;font-size:13px;min-width:90px}.leveltab.active{background:linear-gradient(135deg,#7c4dff,#4f8cff);color:#fff;border-color:transparent}.tabbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 8px}.tabhint{font-size:12px;color:#8f96a8;margin:0 0 12px} 
+.roleview{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.rolemini{padding:10px 12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.025)}
+.rolemini b{display:block;font-size:12px;color:#f3f5fa}.rolemini span{display:block;font-size:11px;color:#8f96a8;margin-top:4px}
+@media(max-width:800px){.roleview{grid-template-columns:repeat(2,1fr)}}
+
+.role-hide{display:none!important}
+
+#dataQualityCard{margin-top:14px}
+.dq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.dq-box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
+.dq-box b{display:block;font-size:12px}.dq-box span{display:block;margin-top:4px;opacity:.68;font-size:11px}
+.dq-list{display:grid;gap:7px}
+.dq-item{padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);font-size:12px}
+.dq-ok{border-left:3px solid #20d6a0}.dq-warn{border-left:3px solid #f4b740}.dq-bad{border-left:3px solid #ef5350}
+.dq-item small{display:block;opacity:.62;margin-top:3px}
+
+/* PREMIUM V2 */
+.v2-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.v2-card{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035)}
+.v2-card .k{font-size:11px;opacity:.65}.v2-card .v{font-size:20px;font-weight:800;margin-top:5px}.v2-card .s{font-size:10px;opacity:.6;margin-top:3px}
+.v2-good{border-left:3px solid #20d6a0}.v2-warn{border-left:3px solid #f4b740}.v2-bad{border-left:3px solid #ef5350}
+.v2-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.v2-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:inherit;border-radius:10px;padding:8px 11px;cursor:pointer;font-weight:700}
+.v2-search{flex:1;min-width:180px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:inherit;border-radius:10px;padding:9px 11px}
+.v2-alerts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.v2-alert{padding:10px 12px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.v2-alert b{display:block}.v2-alert small{display:block;opacity:.65;margin-top:3px}
+@media(max-width:900px){.v2-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.v2-grid,.v2-alerts{grid-template-columns:1fr}}
+
+/* PREMIUM V3 */
+.v3-section{margin-top:12px}
+.v3-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.v3-panel{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035)}
+.v3-panel h3{margin:0 0 8px;font-size:14px}.v3-muted{opacity:.62;font-size:10px}
+.v3-row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:11px}
+.v3-row:last-child{border-bottom:0}.v3-pill{padding:3px 7px;border-radius:99px;font-weight:800;font-size:10px}
+.v3-good{background:rgba(32,214,160,.14);color:#20d6a0}.v3-warn{background:rgba(244,183,64,.14);color:#f4b740}.v3-bad{background:rgba(239,83,80,.14);color:#ef5350}
+.v3-trend{display:flex;align-items:flex-end;gap:5px;height:120px;padding-top:8px}
+.v3-bar{flex:1;min-width:5px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,#20d6a0,#6c5ce7);opacity:.9}
+.v3-labels{display:flex;gap:5px;margin-top:4px}.v3-labels span{flex:1;text-align:center;font-size:8px;opacity:.55}
+.v3-actions{display:grid;gap:7px}.v3-action{padding:9px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.07)}
+.v3-action b{display:block;font-size:11px}.v3-action small{opacity:.65;font-size:9px}
+@media(max-width:600px){.v3-grid{grid-template-columns:1fr}}
+
+/* PREMIUM V4 MANAGEMENT */
+.v4-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.v4-panel{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035)}
+.v4-panel h3{margin:0 0 8px;font-size:14px}
+.v4-item{padding:9px 10px;margin:6px 0;border-radius:10px;border:1px solid rgba(255,255,255,.07)}
+.v4-item b{font-size:11px}.v4-item small{display:block;opacity:.62;margin-top:3px;font-size:9px}
+.v4-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:inherit;border-radius:9px;padding:7px 10px;cursor:pointer;font-weight:700}
+.v4-actions{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.v4-good{border-left:3px solid #20d6a0}.v4-warn{border-left:3px solid #f4b740}.v4-bad{border-left:3px solid #ef5350}
+.v4-table{width:100%;border-collapse:collapse;font-size:10px}.v4-table th,.v4-table td{padding:7px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left}
+@media(max-width:650px){.v4-grid{grid-template-columns:1fr}}
+
+/* WHATSAPP ACTION CENTER */
+.wa-box{margin-top:10px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035)}
+.wa-actions{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.wa-btn{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:inherit;border-radius:9px;padding:8px 11px;cursor:pointer;font-weight:800}
+.wa-preview{width:100%;min-height:145px;box-sizing:border-box;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);color:inherit;border-radius:10px;padding:10px;font:12px/1.5 inherit;resize:vertical}
+
+.wa-snap-preview{display:none;margin-top:10px;width:100%;max-width:760px;border-radius:12px;border:1px solid rgba(255,255,255,.08)}
+
+.tl80-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tl80-card{padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.035)}
+.tl80-card .big{font-size:28px;font-weight:800;margin-top:5px}
+.tl80-card .sub{font-size:10px;opacity:.62;margin-top:4px}
+.tl80-good{border-left:4px solid #20d6a0}
+@media(max-width:650px){.tl80-grid{grid-template-columns:1fr}}
+/* EXECUTIVE HOME OVERVIEW */
+.exec-home{margin:0 0 14px;padding:16px;border:1px solid rgba(124,92,255,.30);border-radius:18px;background:linear-gradient(135deg,rgba(124,92,255,.12),rgba(33,212,164,.06) 55%,rgba(255,255,255,.025));box-shadow:0 16px 40px rgba(0,0,0,.18)}
+.exec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.exec-title{font-size:18px;font-weight:850}.exec-scope{margin-top:4px;color:#aeb7c7;font-size:11px}.exec-badge{padding:6px 9px;border-radius:999px;font-size:10px;font-weight:850;white-space:nowrap}.exec-grid{display:grid;grid-template-columns:1.45fr repeat(4,minmax(0,1fr));gap:9px}.exec-hero,.exec-stat{border:1px solid rgba(255,255,255,.08);background:rgba(7,11,18,.38);border-radius:13px;padding:11px}.exec-hero .big{font-size:27px;font-weight:900}.exec-hero .muted,.exec-stat .muted{font-size:10px;color:#8f98a9}.exec-stat b{display:block;font-size:16px;margin-top:5px}.exec-progress{height:7px;background:#252c3a;border-radius:99px;overflow:hidden;margin-top:9px}.exec-progress i{display:block;height:100%;background:linear-gradient(90deg,#7657ff,#21d4a4);border-radius:99px}.exec-insights{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:9px}.exec-insight{padding:10px 11px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);font-size:11px}.exec-insight b{display:block;margin-bottom:3px}.exec-good{color:#20d6a0}.exec-warn{color:#f4b740}.exec-bad{color:#ef5350}.exec-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.exec-action{padding:7px 9px;border-radius:9px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.07);font-size:10px;color:#cfd5df}
+@media(max-width:900px){.exec-grid{grid-template-columns:repeat(2,1fr)}.exec-hero{grid-column:1/-1}.exec-insights{grid-template-columns:1fr}}
+@media(max-width:520px){.exec-grid{grid-template-columns:1fr 1fr}.exec-hero{grid-column:1/-1}.exec-stat b{font-size:14px}.exec-title{font-size:16px}}
+
+
+.h80-wrap{margin:6px 0 14px}
+.h80-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.h80-card{padding:11px 12px;border:1px solid rgba(255,255,255,.08);border-radius:13px;background:rgba(255,255,255,.035)}
+.h80-card .h80-title{font-size:11px;opacity:.72}
+.h80-card .h80-big{font-size:24px;font-weight:800;margin-top:4px}
+.h80-card .h80-sub{font-size:9px;opacity:.58;margin-top:3px}
+.h80-card.h80-good{border-left:3px solid #20d6a0}
+@media(max-width:650px){.h80-grid{grid-template-columns:1fr 1fr}}
+
+.kpi80{margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;opacity:.9}
+.kpi80 span{opacity:.72}
+.kpi80 b{font-size:15px;color:#20d6a0;white-space:nowrap}
+
+.ppt-snapshot{display:grid;grid-template-columns:1.7fr .7fr;gap:10px;margin-top:10px}.ppt-chart,.ppt-ring-wrap{border:1px solid rgba(255,255,255,.08);background:linear-gradient(145deg,rgba(11,17,29,.82),rgba(22,18,48,.62));border-radius:14px;padding:12px}.ppt-chart-head{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:10px}.ppt-chart-head span{color:#21d4a4;font-weight:800}.ppt-row{display:grid;grid-template-columns:90px 1fr 38px;align-items:center;gap:7px;margin:8px 0;font-size:9px;color:#aeb7c7}.ppt-row b{text-align:right;color:#f4f7fb;font-size:9px}.ppt-track{height:7px;border-radius:99px;background:#252c3a;overflow:hidden}.ppt-track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7657ff,#21d4a4);border-radius:99px;transition:width .4s ease}.ppt-ring-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.ppt-ring{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#21d4a4 0deg,#21d4a4 0deg,#293142 0deg);position:relative}.ppt-ring:after{content:"";position:absolute;inset:7px;border-radius:50%;background:#0d1420}.ppt-ring>div{position:relative;z-index:1}.ppt-ring strong{display:block;font-size:20px}.ppt-ring span{display:block;font-size:8px;color:#929bab;margin-top:2px}.ppt-ring-wrap small{color:#8f98a9;font-size:8px;margin-top:8px}@media(max-width:520px){.ppt-snapshot{grid-template-columns:1fr}.ppt-ring-wrap{min-height:125px}}
+</style>
+
+<style id="taMobileContainment">
+html,body{max-width:100%;width:100%;overflow-x:hidden!important;margin:0!important;padding:0!important}
+*,*::before,*::after{box-sizing:border-box;max-width:100%}
+body{min-width:0!important}
+table{max-width:100%!important}
+@media (max-width:700px){
+  body{font-size:14px!important}
+  .container,.dashboard,.app,.main,.content,main{width:100%!important;max-width:100%!important;min-width:0!important}
+  .card,section,.panel,.kpi,.metric,.tile{width:100%!important;max-width:100%!important;min-width:0!important}
+  .grid{max-width:100%!important}
+  table{display:block;width:100%!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  img,svg,canvas{max-width:100%!important}
+}
+</style>
+
+<style id="taMobileGridFinal">
+@media screen and (max-width:600px){
+  .grid[style*="repeat(5"],
+  .grid[style*="repeat(6"],
+  .grid[style*="repeat(4"]{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+  .grid > .card{
+    min-width:0 !important;
+    max-width:100% !important;
+    width:auto !important;
+  }
+  .grid > .card .v{
+    max-width:100% !important;
+    overflow-wrap:anywhere !important;
+  }
+}
+</style>
+
+<style id="taSecureLoginCSS">
+#taLoginGate{position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 80% -10%,#27204d 0,#080b12 42%);display:grid;place-items:center;padding:20px}
+#taLoginCard{width:min(430px,100%);background:linear-gradient(180deg,#111722,#0e131d);border:1px solid #30394c;border-radius:20px;padding:24px;box-shadow:0 25px 80px #0009}
+#taLoginLogo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#7c5cff,#20d4a4);display:grid;place-items:center;font-weight:900;margin-bottom:14px}
+#taLoginCard h1{font-size:22px;margin:0 0 5px}
+#taLoginCard p{color:#8d98aa;font-size:12px;margin:0 0 18px}
+.ta-login-field{margin:10px 0}.ta-login-field label{display:block;color:#aeb7c7;font-size:11px;margin:0 0 5px}
+.ta-login-field input{width:100%;background:#0b1019;border:1px solid #2b3446;color:#fff;padding:12px;border-radius:10px;outline:none}
+#taLoginBtn{width:100%;margin-top:10px;border:0;background:linear-gradient(135deg,#7657ff,#9a70ff);color:#fff;padding:12px;border-radius:10px;font-weight:850;cursor:pointer}
+#taLoginMsg{min-height:17px;color:#ff7f98;font-size:11px;margin-top:9px}
+#taUserBadge{display:none;padding:8px 10px;border:1px solid #30394c;background:#0e131d;border-radius:10px;color:#cfd5df;font-size:11px}
+#taLogoutBtn{display:none}
+.ta-secure-note{margin-top:12px;font-size:9px;color:#6f7a8c;line-height:1.45}
+</style>
+
+<style id="roleAccessVisibility">
+.role-access-hide{display:none!important}
+.pre-filter-hide{display:none!important}
+</style>
+
+<script id="sourceMappingEngine">
+/*
+ TAUSIF Source Mapping Engine
+ - Uses sheet + metric block mapping.
+ - Keeps Overall Volume separate from Total SO.
+ - Prevents duplicate-header ambiguity.
+*/
+const TAUSIF_SOURCE_MAP = {
+  ZSM: {
+    sheet: "ZSM",
+    metrics: {
+      overallVolume: ["MTD ACH Volume (Overall)", 1],
+      target: ["Target (Value)", 1],
+      achievement: ["MTD Value Achivement (Overall)", 1]
+    }
+  },
+  TL: {
+    sheet: "TL",
+    metrics: {
+      overallVolume: ["MTD ACH Volume (Overall)", 1],
+      target: ["Target (Value)", 1],
+      achievement: ["MTD Value Achivement (Overall)", 1]
+    }
+  },
+  OL: {
+    sheet: "OL",
+    metrics: {
+      overallVolume: ["MTD ACH Volume (Overall)", 1],
+      target: ["Target (Value)", 1],
+      achievement: ["MTD Value Achivement (Overall)", 1]
+    }
+  },
+  Promoter: {
+    sheet: "Promoter Dump",
+    metrics: {
+      overallVolume: ["MTD ACH Volume (Overall)", 1],
+      target: ["Target (Value)", 1],
+      achievement: ["MTD Value Achivement (Overall)", 1]
+    }
+  },
+  ParentCode: {
+    sheet: "OL",
+    metrics: {
+      overallVolume: ["MTD ACH Volume (Overall)", 1],
+      target: ["Target (Value)", 1],
+      achievement: ["MTD Value Achivement (Overall)", 1]
+    }
+  }
+};
+
+function tausifMappedColumn(sheetName, label, occurrence=1){
+  const sh = window.__sourceSheets?.[sheetName];
+  if(!sh?.headers) return -1;
+  const wanted = norm(label);
+  let seen = 0;
+  for(let i=0;i<sh.headers.length;i++){
+    if(norm(sh.headers[i])===wanted){
+      seen++;
+      if(seen===occurrence) return i;
+    }
+  }
+  return -1;
+}
+
+function tausifMappedRows(level, scope){
+  const cfg = TAUSIF_SOURCE_MAP[level] || TAUSIF_SOURCE_MAP.Promoter;
+  const sheetName = Object.keys(window.__sourceSheets||{}).find(
+    x => norm(x)===norm(cfg.sheet)
+  );
+  const sh = sheetName ? window.__sourceSheets[sheetName] : null;
+  if(!sh?.headers) return null;
+
+  let data = sh.data || [];
+  const find = (cands) => {
+    for(const c of cands){
+      const idx = tausifMappedColumn(sheetName, c[0], c[1]);
+      if(idx >= 0) return idx;
+    }
+    return -1;
+  };
+
+  const idx = {
+    zsm: find([["ZSM",1]]),
+    csm: find([["CH / CSM/KAM",1],["CSM",1],["CSM Name",1]]),
+    tl: find([["TL",1],["Team Lead",1]]),
+    emp: find([["Emp Name",1],["Employee Name",1],["Promoter Name",1]]),
+    retailer: find([["Retailer Name",1]]),
+    parent: find([["Parent Code",1],["Parent_Code",1],["ParentCode",1]])
+  };
+
+  const match = (r, idx, val) =>
+    idx >= 0 && (!val || norm(r[idx])===norm(val));
+
+  data = data.filter(r =>
+    match(r,idx.zsm,scope?.zsm) &&
+    match(r,idx.csm,scope?.csm) &&
+    match(r,idx.tl,scope?.tl) &&
+    match(r,idx.emp,scope?.emp) &&
+    match(r,idx.retailer,scope?.ret) &&
+    match(r,idx.parent,scope?.parent)
+  );
+
+  const vol = tausifMappedColumn(sheetName, ...cfg.metrics.overallVolume);
+  const tar = tausifMappedColumn(sheetName, ...cfg.metrics.target);
+  const ach = tausifMappedColumn(sheetName, ...cfg.metrics.achievement);
+
+  return {
+    sheetName, rows:data, volumeIndex:vol, targetIndex:tar, achievementIndex:ach
+  };
+}
+
+function tausifMappedSum(level, scope){
+  const x = tausifMappedRows(level,scope);
+  if(!x) return null;
+  const sum = idx => idx>=0 ? x.rows.reduce((s,r)=>s+num(r[idx]),0) : 0;
+  return {
+    volume:sum(x.volumeIndex),
+    target:sum(x.targetIndex),
+    achievement:sum(x.achievementIndex),
+    rows:x.rows.length,
+    sheet:x.sheetName
+  };
+}
+</script>
+
+
+<style id="actionDetailStyles">
+#actionDetailModal{display:none;position:fixed;inset:0;z-index:9999}
+#actionDetailModal.show{display:block}
+.action-modal-backdrop{position:absolute;inset:0;background:rgba(3,6,12,.72);backdrop-filter:blur(5px)}
+.action-modal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,620px);max-height:78vh;overflow:auto;background:linear-gradient(180deg,#121927,#0d121b);border:1px solid #3b4660;border-radius:18px;padding:16px;box-shadow:0 25px 80px #0009}
+.action-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.action-modal-title{font-size:18px;font-weight:850;color:#fff}
+.action-modal-sub{color:#9da7b8;font-size:11px;margin-top:4px}
+.action-detail-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border:1px solid #283143;background:#151b27;border-radius:12px;margin:8px 0}
+.action-detail-row b{display:block;font-size:14px}
+.action-detail-row small{display:block;color:#9da7b8;font-size:11px;margin-top:4px}
+@media(max-width:600px){.action-modal{width:calc(100vw - 24px);padding:13px}.action-detail-row{align-items:flex-start}.action-detail-row small{max-width:245px;line-height:1.45}}
+</style>
+
+</head>
+<body>
+<div id="taLoginGate">
+  <div id="taLoginCard">
+    <div id="taLoginLogo">TS</div>
+    <h1>TAUSIF • SALES COMMAND CENTER</h1>
+    <p>Secure access • Role based dashboard</p>
+    <div class="ta-login-field"><label>Username</label><input id="taLoginUser" autocomplete="username" placeholder="Enter username"></div>
+    <div class="ta-login-field"><label>Password</label><input id="taLoginPass" type="password" autocomplete="current-password" placeholder="Enter password"></div>
+    <button id="taLoginBtn">🔐 Login</button>
+    <div id="taLoginMsg"></div>
+    <div class="ta-secure-note">Credentials are configured in the <b>ACCESS_USERS</b> block in this HTML. Replace the sample passwords and scopes before publishing.</div>
+  </div>
+</div>
+
+<div class="wrap">
+<header class="top">
+ <div class="brand"><div class="logo">TS</div><div><div class="title">TAUSIF • SALES COMMAND CENTER</div><div class="sub">Premium Excel-driven ZSM → CSM → TL → Promoter → Retailer intelligence</div></div></div>
+ <div id="taUserBadge"></div><button id="taLogoutBtn" class="btn">Logout</button><label class="btn primary upload">📤 Upload Excel<input id="file" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"></label>
+</header>
+<div id="status" class="status">Upload your PLA.xlsx file to generate the command center.</div>
+<div class="status" style="margin-top:8px">🧭 <b>TAUSIF source-mapped:</b> each hierarchy reads its own Excel sheet/block; Overall Volume is kept separate from Total SO.</div>
+<div id="app" class="hidden">
+<section class="exec-home" id="execHome">
+  <div class="exec-head">
+    <div><div class="exec-title">📊 Executive Overview</div><div class="exec-scope" id="execScope">Current selected scope</div></div>
+    <span class="exec-badge exec-warn" id="execStatus">—</span>
+  </div>
+  <div class="exec-grid">
+    <div class="exec-hero"><div class="muted">Achievement vs Target</div><div class="big" id="execAch">0%</div><div class="exec-progress"><i id="execProgress" style="width:0%"></i></div><div class="muted" id="execGap">Gap: ₹0</div></div>
+    <div class="exec-stat"><div class="muted">🎯 Target</div><b id="execTarget">₹0</b></div>
+    <div class="exec-stat"><div class="muted">💰 MTD Sellout</div><b id="execMTD">₹0</b></div>
+    <div class="exec-stat"><div class="muted">📦 Volume</div><b id="execVolume">0</b></div>
+    <div class="exec-stat"><div class="muted">⚡ Required DRR</div><b id="execReqDRR">₹0</b></div>
+  </div>
+  <div class="exec-insights">
+    <div class="exec-insight"><b>👥 Coverage</b><span id="execCoverage">—</span></div>
+    <div class="exec-insight"><b>🏅 80%+ Performance</b><span id="exec80">—</span></div>
+    <div class="exec-insight"><b>🔥 Today's Focus</b><span id="execFocus">—</span></div>
+  </div>
+  <div class="ppt-snapshot">
+    <div class="ppt-chart">
+      <div class="ppt-chart-head"><b>📈 Performance Snapshot</b><span id="execScore">—</span></div>
+      <div class="ppt-row"><span>MTD Sellout</span><div class="ppt-track"><i id="execSelloutBar"></i></div><b id="execSelloutPct">0%</b></div>
+      <div class="ppt-row"><span>Target Coverage</span><div class="ppt-track"><i id="execTargetBar"></i></div><b id="execTargetPct">0%</b></div>
+      <div class="ppt-row"><span>Overall 80%+</span><div class="ppt-track"><i id="exec80Bar"></i></div><b id="exec80Pct">0%</b></div>
+      <div class="ppt-row"><span>Note Series 80%+</span><div class="ppt-track"><i id="execNoteBar"></i></div><b id="execNotePct">0%</b></div>
+    </div>
+    <div class="ppt-ring-wrap"><div class="ppt-ring" id="execRing"><div><strong id="execRingVal">0%</strong><span>Achievement</span></div></div><small>Selected scope performance</small></div>
+  </div>
+  <div class="exec-actions" id="execActions"></div>
+</section>
+<div class="tabbar" id="levelTabs">
+<button class="leveltab active" data-level="ZSM">👨‍💼 ZSM</button>
+<button class="leveltab" data-level="CSM">🧑‍💼 CSM</button>
+<button class="leveltab" data-level="TL">👔 TL</button>
+<button class="leveltab" data-level="Promoter">👤 Promoter</button><button class="leveltab" data-level="ParentCode">🏪 Parent Code</button>
+</div>
+<div class="tabhint" id="tabHint">ZSM → Retailer Management</div>
+<div class="roleview" id="roleView"></div>
+<div class="filters" id="filters"></div>
+<div class="status" style="margin-top:-4px;margin-bottom:14px;padding:8px 12px">
+  🧭 <b>Drill-down:</b> ZSM → CSM → TL → Promoter → Retailer
+</div>
+
+
+<div class="grid">
+ <div class="card metric"><div class="label">Total Target</div><div id="mTarget" class="v">₹0</div><div class="delta">Overall plan</div></div>
+ <div class="card metric"><div class="label">MTD Achievement</div><div id="mAch" class="v">₹0</div><div class="delta">Current sellout</div></div>
+ <div class="card metric"><div class="label">Achievement</div><div id="mPct" class="v">0%</div><div class="delta">Target conversion</div></div>
+ <div class="card metric"><div class="label">Target Gap</div><div id="mGap" class="v">₹0</div><div class="delta">Remaining</div></div>
+ <div class="card metric"><div class="label">Total Volume</div><div id="mVol" class="v">0</div><div class="delta">Units sold</div><div class="kpi80" id="kpiOverall80"><span>🎯 Overall 80%+</span><b id="kpiOverall80Value">0 / 0</b></div></div>
+ <div class="card metric"><div class="label">Note Series</div><div id="mNote" class="v">0%</div><div class="delta">RN14 / RN15 / RN17</div><div class="kpi80" id="kpiNote80"><span>📱 Note Series 80%+</span><b id="kpiNote80Value">0 / 0</b></div></div>
+</div>
+<div class="grid" style="grid-template-columns:repeat(6,1fr)">
+ <div class="card metric"><div class="label">🧑‍💼 CSMs</div><div id="hCSM" class="v">0</div><div class="delta">Unique CSM</div></div>
+ <div class="card metric"><div class="label">👨‍💼 ZSMs</div><div id="hZSM" class="v">0</div><div class="delta">Unique ZSM</div></div>
+ <div class="card metric"><div class="label">👔 TLs</div><div id="hTL" class="v">0</div><div class="delta">Unique TL</div></div>
+ <div class="card metric"><div class="label">👤 Promoters</div><div id="hProm" class="v">0</div><div class="delta">Unique Emp ID</div></div>
+ <div class="card metric"><div class="label">🟢 Active Promoters</div><div id="hActive" class="v">0</div><div class="delta">Status = Active</div></div>
+ <div class="card metric"><div class="label">🏪 Retailers</div><div id="hRetail" class="v">0</div><div class="delta">Unique Retailer ID</div></div>
+</div>
+<div class="grid" style="grid-template-columns:repeat(5,1fr)">
+ <div class="card metric"><div class="label">📅 Report Date</div><div id="dDate" class="v">—</div><div class="delta" id="dMonth">—</div></div>
+ <div class="card metric"><div class="label">⏱ Days Passed</div><div id="dPassed" class="v">0</div><div class="delta">Working days</div></div>
+ <div class="card metric"><div class="label">📆 Days Remaining</div><div id="dRemain" class="v">0</div><div class="delta">Working days</div></div>
+ <div class="card metric"><div class="label">⚡ Current DRR</div><div id="dCurrent" class="v">₹0</div><div class="delta">Achievement / day</div></div>
+ <div class="card metric"><div class="label">🎯 Required DRR</div><div id="dRequired" class="v">₹0</div><div class="delta" id="dStatus">—</div></div>
+</div>
+<div class="two section">
+ <div class="h80-wrap" id="hierarchy80Tracker" style="display:none!important">
+ <div class="sectionhead"><h2>🏅 80%+ Performance Tracker</h2><span>Current scope</span></div>
+ <div class="h80-grid">
+  <div class="h80-card h80-good"><div class="h80-title" id="overall80Title">🎯 Retailers — Overall Achievement 80%+</div><div class="h80-big" id="overall80Value">0 / 0</div><div class="h80-sub" id="overall80Sub"></div></div>
+  <div class="h80-card h80-good"><div class="h80-title" id="note80Title">📱 Retailers — Note Series 80%+</div><div class="h80-big" id="note80Value">0 / 0</div><div class="h80-sub" id="note80Sub"></div></div>
+ </div>
+<section class="card"><div class="sectionhead"><h2>📈 DRR Intelligence</h2><span>Run-rate vs target</span></div>
+   <div id="drrBars"></div>
+ </section>
+ <section class="card"><div class="sectionhead"><h2>🔮 Month-End Projection</h2><span>Based on current pace</span></div>
+   <div id="projection"></div>
+ </section>
+</div>
+
+<div class="two section">
+ <section class="card"><div class="sectionhead"><h2>🧭 Management Hierarchy</h2><span>Counts change with your selected filter</span></div>
+   <div id="hierarchySummary"></div>
+ </section>
+ <section class="card"><div class="sectionhead"><h2>🧹 Data Quality</h2><span>Automatic checks</span></div>
+   <div id="dataQuality"></div>
+ </section>
+</div>
+
+<div class="two section">
+ <section class="card"><div class="sectionhead"><h2>🧑‍💼 CSM Command Board</h2><span>Promoter Dump → CH / CSM/KAM → performance & DRR</span></div><div class="tablewrap"><table id="csm"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2>🧭 CSM Summary</h2><span>Automatic management view</span></div><div id="csmSummary"></div></section>
+</div>
+
+<div class="two section">
+ <section class="card"><div class="sectionhead"><h2>👨‍💼 TL Command Board</h2><span>Ranked by achievement</span></div><div class="tablewrap"><table id="tl"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2>⚡ Action Center</h2><span>Auto-detected</span></div><div id="actions"></div></section>
+</div>
+
+<div class="two section">
+ <section class="card"><div class="sectionhead"><h2 id="rankingTitle">🏆 Employee Ranking</h2><span id="rankingSubtitle">Top performers</span></div><div class="tablewrap"><table id="perf"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2 id="heatmapTitle">📈 Achievement Heatmap</h2><span id="heatmapSubtitle">Higher is better</span></div><div id="bars"></div></section>
+</div>
+
+<div class="three section">
+ <section class="card"><div class="sectionhead"><h2>🥇 Top 5</h2></div><div id="top5"></div></section>
+ <section class="card"><div class="sectionhead"><h2>⚠️ Bottom 5</h2></div><div id="bottom5"></div></section>
+ <section class="card"><div class="sectionhead"><h2>🎯 Gap Focus</h2></div><div id="gap5"></div></section>
+</div>
+
+<section class="card section"><div class="sectionhead"><h2>📱 Product Sellout Matrix</h2><span>Employee × Product</span></div><div class="tablewrap"><table id="products"></table></div></section>
+<section class="card section"><div class="sectionhead"><h2>📝 Note Series Performance</h2></div><div class="tablewrap"><table id="notes"></table></div></section>
+
+<section class="two section">
+ <section class="card"><div class="sectionhead"><h2>🎯 Today's Focus</h2><span>Auto-prioritized actions</span></div><div id="todayFocus"></div></section>
+ <section class="card"><div class="sectionhead"><h2>📈 Growth Intelligence</h2><span>MTD vs LMTD</span></div><div id="growth"></div></section>
+</section>
+
+<section class="three section">
+ <section class="card"><div class="sectionhead"><h2>🏆 CSM Leaderboard</h2><span>Achievement %</span></div><div class="tablewrap"><table id="csmLead"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2>🏅 ZSM Leaderboard</h2><span>Achievement %</span></div><div class="tablewrap"><table id="zsmLead"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2>🥇 TL Leaderboard</h2><span>Achievement %</span></div><div class="tablewrap"><table id="tlLead"></table></div></section>
+</section>
+
+<section class="two section">
+ <section class="card"><div class="sectionhead"><h2>🏪 Retailer Intelligence</h2><span>Unique retailer performance</span></div><div class="tablewrap"><table id="retailLead"></table></div></section>
+ <section class="card"><div class="sectionhead"><h2>📱 Product Intelligence</h2><span>All Models MTD SO • Current Scope</span></div><div class="tablewrap"><table id="productLead"></table></div></section>
+</section>
+
+
+
+<section class="card" id="premiumV2Card">
+  <div class="sectionhead">
+    <h2>🚀 Premium Sales Intelligence</h2>
+    <span id="v2Mode">Live filtered view</span>
+  </div>
+  <div class="v2-grid" id="v2Kpis"></div>
+  <div class="v2-toolbar">
+    <input id="v2Search" class="v2-search" placeholder="🔎 Search promoter / retailer / TL / CSM / ZSM">
+    <button class="v2-btn" id="v2Reconcile">🔄 Reconcile All</button>
+    <button class="v2-btn" id="v2Export">📥 Export Filtered CSV</button>
+  </div>
+  <div class="v2-alerts" id="v2Alerts"></div>
+</section>
+
+<section class="card v3-section" id="premiumV3Card">
+  <div class="sectionhead">
+    <h2>🧠 Management Intelligence</h2>
+    <span>Trend • Productivity • Gap Reasons</span>
+  </div>
+  <div class="v3-grid">
+    <div class="v3-panel">
+      <h3>📅 Daily Sellout Trend</h3>
+      <div class="v3-muted" id="v3TrendSub">Current filtered scope</div>
+      <div class="v3-trend" id="v3Trend"></div>
+      <div class="v3-labels" id="v3TrendLabels"></div>
+    </div>
+    <div class="v3-panel">
+      <h3>🏪 Retailer Productivity</h3>
+      <div id="v3Retailer"></div>
+    </div>
+    <div class="v3-panel">
+      <h3>👤 Promoter Productivity</h3>
+      <div id="v3Promoter"></div>
+    </div>
+    <div class="v3-panel">
+      <h3>🚨 Why Behind the Gap</h3>
+      <div class="v3-muted" id="v3GapSummary"></div>
+      <div class="v3-actions" id="v3Actions"></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="card" id="tl80Card">
+ <div class="sectionhead">
+  <h2>🏅 TL Promoter 80%+ Tracker</h2>
+  <span>TL scope only</span>
+ </div>
+ <div class="tl80-grid">
+  <div class="tl80-card tl80-good">
+   <div class="label">🎯 Overall Achievement 80%+</div>
+   <div class="big" id="tlOverall80">0 / 0</div>
+   <div class="sub" id="tlOverall80Sub">Promoters at or above 80% overall achievement</div>
+  </div>
+  <div class="tl80-card tl80-good">
+   <div class="label">📱 Note Series 80%+</div>
+   <div class="big" id="tlNote80">0 / 0</div>
+   <div class="sub" id="tlNote80Sub">Promoters at or above 80% Note Series achievement</div>
+  </div>
+ </div>
+</section>
+
+
+</div>
+<section class="card" id="premiumV4Card">
+ <div class="sectionhead">
+  <h2>🧭 Management 360°</h2>
+  <span>Reconciliation • Growth • Smart Actions</span>
+ </div>
+ <div class="v4-grid">
+  <div class="v4-panel">
+   <h3>🔄 Reconciliation Center</h3>
+   <div class="v4-actions"><button class="v4-btn" id="v4Reconcile">Run Reconciliation</button></div>
+   <div id="v4Recon"></div>
+  </div>
+  <div class="v4-panel">
+   <h3>📈 Growth & Pace</h3>
+   <div id="v4Growth"></div>
+  </div>
+  <div class="v4-panel">
+   <h3>🚨 Smart Alerts</h3>
+   <div id="v4Alerts"></div>
+  </div>
+  <div class="v4-panel">
+   <h3>🎯 What Should I Do Today?</h3>
+   <div id="v4Actions"></div>
+  </div>
+ </div>
+</section>
+
+<section class="card" id="whatsappCard">
+ <div class="sectionhead">
+  <h2>📲 WhatsApp Team Update</h2>
+  <span>Generate from current filters</span>
+ </div>
+ <div class="wa-box">
+  <div class="wa-actions">
+   <button class="wa-btn" id="waGenerate">✨ Generate Message</button>
+   <button class="wa-btn" id="waCopy">📋 Copy</button>
+   <button class="wa-btn" id="waOpen">💬 Open WhatsApp</button><button class="wa-btn" id="waSnapshot">📸 Create Snapshot</button><button class="wa-btn" id="waShare">📤 Share Snapshot + Message</button>
+  </div>
+  <textarea id="waPreview" class="wa-preview" placeholder="Generate a management message from the selected ZSM / CSM / TL / Promoter / Parent Code filter..."></textarea>
+ </div>
+</section>
+<section class="card" id="dataQualityCard">
+  <div class="sectionhead">
+    <h2>🛡️ Data Quality & Source Control</h2>
+    <span id="dqStatus">Checking…</span>
+  </div>
+  <div class="dq-grid">
+    <div class="dq-box"><b>Promoter</b><span>Promoter Dump</span></div>
+    <div class="dq-box"><b>TL</b><span>TL / All Models MTD SO</span></div>
+    <div class="dq-box"><b>ZSM</b><span>ZSM / All Models MTD SO</span></div>
+    <div class="dq-box"><b>CSM</b><span>Promoter Dump → CH / CSM/KAM</span></div>
+    <div class="dq-box"><b>Retailer</b><span>OL / All Models MTD SO</span></div>
+    <div class="dq-box"><b>Product</b><span>All Models MTD SO → Total SO</span></div>
+  </div>
+  <div id="dqRows" class="dq-list"></div>
+</section>
+<section class="card section"><div class="sectionhead"><h2>⬇️ Export</h2><button id="download" class="btn">Download Filtered Excel</button></div><div class="mini">Exports the exact filtered records currently shown in the dashboard.</div></section>
+</div></div>
+
+<script>
+const $=x=>document.getElementById(x), num=v=>{if(v==null||v==="")return 0;let x=parseFloat(String(v).replace(/,/g,"").replace(/₹/g,""));return isNaN(x)?0:x}, clean=v=>v==null?"":String(v).trim(), money=n=>"₹"+Math.round(n).toLocaleString("en-IN"), pct=n=>(n*100).toFixed(0)+"%";
+let rows=[],filtered=[],headers=[];
+/* ============================================================
+   SECURE ACCESS CONFIG
+   Change the sample usernames/passwords/scopes below.
+   scopeValue must exactly match the uploaded Excel value.
+   Examples:
+   {user:"tausif", pass:"YOUR_PASSWORD", role:"TL", scopeField:"TL", scopeValue:"TAUSIF SAFIK SHAIKH"}
+   {user:"rahul", pass:"YOUR_PASSWORD", role:"ZSM", scopeField:"ZSM", scopeValue:"RAHUL ..."}
+   ============================================================ */
+const ACCESS_USERS = [
+  {user:"Admin", pass:"2512", role:"Admin", scopeField:"", scopeValue:""},
+  {user:"ZSM", pass:"1111", role:"ZSM", scopeField:"", scopeValue:""},
+  {user:"CSM", pass:"2222", role:"CSM", scopeField:"", scopeValue:""},
+  {user:"TL", pass:"3333", role:"TL", scopeField:"", scopeValue:""}
+];
+let currentAccess=null, appUnlocked=false;
+
+function normAccess(v){return clean(v).replace(/\s+/g," ").toLocaleLowerCase();}
+function accessMatch(r){
+  if(!currentAccess || currentAccess.role==="Admin") return true;
+  const f=currentAccess.scopeField;
+  if(!f || !currentAccess.scopeValue) return true;
+  const actualKey=headers.find(h=>norm(h)===norm(f));
+  return actualKey ? normAccess(r[actualKey])===normAccess(currentAccess.scopeValue) : false;
+}
+function enforceAccess(){
+  if(!currentAccess || currentAccess.role==="Admin") return;
+  // Force the role tab to the user's allowed level.
+  const level=currentAccess.role==="Promoter" ? "Promoter" : currentAccess.role;
+  activeLevel=level;
+  document.querySelectorAll(".leveltab").forEach(b=>{
+    b.classList.toggle("active",b.dataset.level===level);
+    b.style.pointerEvents="none";
+    b.style.opacity=b.dataset.level===level?"1":".35";
+  });
+  // Scope rows to the assigned person before rendering.
+  const allowed=rows.filter(accessMatch);
+  if(currentAccess.scopeField && currentAccess.scopeValue && !allowed.length){
+    filtered=[];
+    $("status").textContent="⚠️ Login scope not found in uploaded Excel: "+currentAccess.scopeValue;
+    return;
+  }
+}
+function openDashboardAfterLogin(){
+  $("taLoginGate").style.display="none";
+  const uploadBtn=document.querySelector(".upload");
+  if(uploadBtn) uploadBtn.style.display="inline-flex";
+  $("app").classList.remove("hidden");
+  $("taUserBadge").style.display="block";
+  $("taLogoutBtn").style.display="inline-block";
+  $("taUserBadge").textContent=`🔐 ${currentAccess.user} • ${currentAccess.role}${currentAccess.scopeValue?" • "+currentAccess.scopeValue:""}`;
+}
+function doLogin(){
+  const u=clean(document.getElementById("taLoginUser").value), p=document.getElementById("taLoginPass").value;
+  const found=ACCESS_USERS.find(x=>x.user.toLowerCase()===u.toLowerCase() && x.pass===p);
+  if(!found){document.getElementById("taLoginMsg").textContent="❌ Invalid username or password.";return;}
+  currentAccess={...found}; appUnlocked=true;
+  openDashboardAfterLogin();
+  if(rows.length){enforceAccess();buildFilters(false);render();applyRoleVisibility();}
+}
+document.getElementById("taLoginBtn").onclick=doLogin;
+document.getElementById("taLoginPass").onkeydown=e=>{if(e.key==="Enter")doLogin();};
+$("taLogoutBtn").onclick=()=>{
+  currentAccess=null; appUnlocked=false; location.reload();
+};
+
+function col(n){return headers.includes(n)?n:null} function first(a){return a.map(col).find(Boolean)||null}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function badge(p){return `<span class="pill ${p>=.4?"good":p>=.2?"mid":"bad"}">${pct(p)}</span>`}
+function group(data,key,fields){
+ let m=new Map();
+ data.forEach(r=>{
+   let rawName=clean(r[key]).replace(/\s+/g," ")||"-";
+   let nk=rawName.toLocaleLowerCase();
+   if(!m.has(nk))m.set(nk,{display:rawName});
+   fields.forEach(f=>m.get(nk)[f]=(m.get(nk)[f]||0)+num(r[f]));
+ });
+ return [...m.entries()].map(([_,v])=>({key:v.display,...v}));
+}
+$("file").addEventListener("click",e=>{e.target.value=""});
+$("file").onchange=async e=>{
+ let f=e.target.files&&e.target.files[0];
+ e.target.value="";
+ if(!f)return;
+ $("status").textContent="⏳ Reading "+f.name+"…";
+ try{
+   if(typeof XLSX==="undefined") throw Error("Excel reader library not loaded. Please reopen the dashboard.");
+   if(!/\.(xlsx|xls|csv)$/i.test(f.name)) throw Error("Please upload .xlsx, .xls or .csv file.");
+   let wb=XLSX.read(await f.arrayBuffer(),{type:"array",cellDates:true});
+   if(!wb.SheetNames.length) throw Error("No sheets found in this Excel file.");
+   let s=wb.SheetNames.find(x=>x.toLowerCase().includes("promoter dump"))||wb.SheetNames[0];
+   let a=XLSX.utils.sheet_to_json(wb.Sheets[s],{header:1,defval:"",raw:true});
+   let rawDate=a?.[1]?.[2];
+   window.__reportDate=(rawDate instanceof Date&&!isNaN(rawDate))?rawDate:new Date();
+   window.__sourceSheets={};
+   wb.SheetNames.forEach(sn=>{
+     let aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:"",raw:true});
+     let anchor=-1,anchorCol=-1;
+     for(let rr=0;rr<Math.min(aoa.length,12);rr++){
+       for(let cc=0;cc<aoa[rr].length;cc++){
+         if(String(aoa[rr][cc]||"").trim().toLowerCase()==="all models mtd so"){anchor=rr;anchorCol=cc;break;}
+       }
+       if(anchor>=0)break;
+     }
+     let headerRow=anchor>=0?anchor+1:-1;
+     if(headerRow<0||!aoa[headerRow]){window.__sourceSheets[sn]={aoa};return;}
+     let sh=aoa[headerRow].map(clean),prodStart=anchorCol,prodEnd=-1;
+     for(let cc=prodStart;cc<sh.length;cc++){
+       if(String(sh[cc]||"").trim().toLowerCase()==="total so"){prodEnd=cc-1;break;}
+     }
+     if(prodEnd<prodStart)prodEnd=sh.length-1;
+     let data=aoa.slice(headerRow+1).filter(r=>r.some(x=>clean(x)));
+     window.__sourceSheets[sn]={aoa,headers:sh,headerRow,prodStart,prodEnd,rows:data};
+   });
+   let hr=a.findIndex(r=>r.some(x=>String(x).trim()==="Emp Name")&&r.some(x=>String(x).trim()==="Retailer Name"));
+   if(hr<0)hr=a.findIndex(r=>r.some(x=>String(x).includes("Target (Value)")));
+   if(hr<0)throw Error("Promoter Dump header row not detected.");
+   // Keep duplicate Excel headers deterministic. The workbook contains repeated
+   // metric blocks (for example Target / Achievement / Volume). The dashboard
+   // uses the FIRST/MAIN occurrence, so never let a later duplicate overwrite it.
+   headers=a[hr].map(clean);
+   const mainHeaders=[]; const headerSeen=new Map();
+   headers.forEach((h,i)=>{
+     if(!h)return;
+     const n=(headerSeen.get(h)||0)+1; headerSeen.set(h,n);
+     mainHeaders.push(n===1?h:`${h}.${n}`);
+   });
+   window.__promoterMain={aoa:a,headerRow:hr,headers:headers,
+     empCol:headers.findIndex(h=>norm(h)==="emp name"),
+     tlCol:headers.findIndex(h=>norm(h)==="tl"),
+     zsmCol:headers.findIndex(h=>norm(h)==="zsm"),
+     csmCol:headers.findIndex(h=>["ch / csm/kam","csm","csm name"].includes(norm(h)))};
+   rows=a.slice(hr+1).filter(r=>r.some(x=>clean(x))).map(r=>Object.fromEntries(mainHeaders.map((h,i)=>[h,r[i]]))).filter(r=>clean(r["Emp Name"]));
+   if(!rows.length)throw Error("No promoter records found in Promoter Dump.");
+   $("app").classList.remove("hidden");
+   // Never reset a logged-in user to ZSM. Keep the dashboard locked to the
+   // role that authenticated, then show only that role's hierarchy/filter.
+   const loginRole=(currentAccess?.role||"Admin").toUpperCase();
+   activeLevel=loginRole==="ADMIN"?"ZSM":(loginRole==="PROMOTER"?"Promoter":loginRole);
+   document.querySelectorAll(".leveltab").forEach(b=>b.classList.toggle("active",b.dataset.level===activeLevel));
+   enforceAccess();
+   renderRoleView();
+   buildFilters(false);
+   render();
+   applyRoleVisibility();
+   $("status").textContent=`✓ ${rows.length.toLocaleString("en-IN")} records loaded • ${s}`;
+ }catch(err){
+   console.error(err);
+   $("app").classList.add("hidden");
+   $("status").textContent="❌ Upload Error: "+(err.message||String(err));
+ }
+};
+
+let activeLevel="ZSM";
+const levelConfig={
+ ZSM:{hint:"ZSM → Retailer Management",filters:[["ZSM",["ZSM"]]]},
+ CSM:{hint:"CSM → Retailer Management",filters:[["CSM",["CH / CSM/KAM","CSM","CSM Name","Customer Service Manager"]]]},
+ TL:{hint:"TL → Promoter Management",filters:[["TL",["TL","Team Lead"]]]},
+ ParentCode:{hint:"Parent Code → Retailer + Promoter Management",filters:[["Parent Code",["Parent_Code","Parent Code","ParentCode","Parent Code ID"]]]},
+ Promoter:{hint:"TL → Promoter Management",filters:[["TL",["TL","Team Lead"]]]}
+};
+function getFilterMap(){
+  if(activeLevel==="ParentCode"){
+    // Parent Code section has ONLY the Parent Code filter.
+    // ZSM/CSM access is already restricted by their login scope.
+    return [["Parent Code",["Parent_Code","Parent Code","ParentCode","Parent Code ID"]]];
+  }
+  return levelConfig[activeLevel].filters;
+}
+function resolveFilterColumn(candidates){return candidates.find(x=>col(x))||null}
+
+function applyParentCodeIsolation(){
+  if(activeLevel!=="ParentCode") return;
+
+  const pc=resolveFilterColumn(["Parent_Code","Parent Code","ParentCode","Parent Code ID"]);
+  if(!pc) return;
+
+  const selected=document.querySelector('.filter select[data-label="Parent Code"]')?.value||"";
+  const role=(currentAccess?.role||"Admin").toUpperCase();
+
+  // Parent Code has NO ZSM/CSM login restriction.
+  // ZSM/CSM can see and select all Parent Codes.
+  if(role==="ZSM" || role==="CSM"){
+    filtered=rows.filter(r=>{
+      if(selected && clean(r[pc]).replace(/\s+/g," ")!==selected) return false;
+      return true;
+    });
+    return;
+  }
+
+  // Existing access rules remain unchanged for other roles.
+  filtered=rows.filter(r=>{
+    if(!accessMatch(r)) return false;
+    if(selected && clean(r[pc]).replace(/\s+/g," ")!==selected) return false;
+    return true;
+  });
+}
+function getSelectedFilters(){let out={};document.querySelectorAll(".filter select").forEach(s=>out[s.dataset.label]=s.value||"");return out}
+function buildFilters(preserve=true){
+ let box=$("filters"),old=preserve?getSelectedFilters():{};box.innerHTML=""; const baseRows=(currentAccess&&currentAccess.role!=="Admin")?rows.filter(accessMatch):rows;
+ const map=getFilterMap();
+ map.forEach(([label,candidates],idx)=>{
+   const cc=resolveFilterColumn(candidates);if(!cc)return;
+   let optionRows=baseRows.filter(r=>{
+     for(let j=0;j<idx;j++){const [pl,pc]=map[j],pcol=resolveFilterColumn(pc),val=old[pl]||"";if(pcol&&val&&clean(r[pcol]).replace(/\s+/g," ")!==val)return false}return true;
+   });
+   let vs=[...new Set(optionRows.map(r=>clean(r[cc]).replace(/\s+/g," ")).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+   let selected=old[label]&&vs.includes(old[label])?old[label]:"";
+   let d=document.createElement("div");d.className="filter";
+   d.innerHTML=`<label>${label}</label><select data-col="${cc}" data-label="${label}"><option value="">All</option>${vs.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v)}</option>`).join("")}</select>`;
+   box.appendChild(d);
+ });
+ box.querySelectorAll("select").forEach(s=>s.onchange=()=>{buildFilters(true);applyParentCodeIsolation();render()});
+}
+
+const roleViews={
+ ZSM:{
+  hint:"ZSM → Retailer Management",
+  cards:[
+   ["🏪","Retailer Focus","OL / retailer performance only"],
+   ["📊","Retailer Sellout","All Models MTD SO"],
+   ["🎯","Target & DRR","ZSM target + run-rate"],
+   ["👥","Team Coverage","CSM • TL • Retailer"]
+  ]
+ },
+ CSM:{
+  hint:"CSM → Retailer Management",
+  cards:[
+   ["🏪","Retailer Focus","OL / retailer performance only"],
+   ["📊","Retailer Sellout","All Models MTD SO"],
+   ["🎯","Target & DRR","CSM target + run-rate"],
+   ["👥","Team Coverage","ZSM • TL • Retailer"]
+  ]
+ },
+ TL:{
+  hint:"TL → Promoter Management",
+  cards:[
+   ["👤","Promoter Focus","Promoter Dump"],
+   ["📊","Promoter Sellout","All Models MTD SO"],
+   ["🎯","Target & DRR","TL target + run-rate"],
+   ["👥","Team Coverage","Promoters • Retailers"]
+  ]
+ },
+ ParentCode:{
+  hint:"Parent Code → Retailer + Promoter Management",
+  cards:[
+   ["🏪","Parent Code Focus","Only selected Parent_Code data"],
+   ["📊","Sellout","All Models MTD SO"],
+   ["🎯","Target & DRR","Selected Parent Code run-rate"],
+   ["👥","Coverage","Promoters • Retailers"]
+  ]
+ },
+ Promoter:{
+  hint:"Promoter → Individual + Product Management",
+  cards:[
+   ["👤","Promoter Focus","Individual promoter"],
+   ["🏪","Retailer","Assigned retailer"],
+   ["📱","Product Sellout","All Models MTD SO"],
+   ["🎯","Target & DRR","Individual run-rate"]
+  ]
+ }
+};
+
+function applyRoleVisibility(){
+  const cards=[...document.querySelectorAll("section.card, section.two, section.three")];
+  cards.forEach(c=>c.classList.remove("role-hide","role-access-hide","pre-filter-hide"));
+
+  const loginRole=(currentAccess?.role||"Admin").toUpperCase();
+  const text=c=>((c.querySelector("h2")?.textContent||"")+" "+(c.textContent||"")).toLowerCase();
+
+  // Admin gets the complete dashboard.
+  if(loginRole==="ADMIN") return;
+
+  // A non-admin must first select their own role in the role filter.
+  // Until then, do not expose any aggregate target/achievement cards.
+  const selected=getSelectedFilters();
+
+  // ZSM/CSM Parent Code view is an independent management view.
+  // It must show the Executive Overview after a Parent Code is selected,
+  // without requiring a ZSM/CSM filter selection.
+  const requiredLabel =
+    activeLevel==="ParentCode"
+      ? "Parent Code"
+      : loginRole==="TL" ? "TL"
+      : loginRole==="CSM" ? "CSM"
+      : loginRole==="ZSM" ? "ZSM"
+      : null;
+
+  const hasSelection = loginRole==="ZSM" || loginRole==="CSM"
+    ? (activeLevel==="ParentCode"
+        ? !!selected["Parent Code"]
+        : !!selected[requiredLabel])
+    : !!(requiredLabel && selected[requiredLabel]);
+
+  $("execHome")?.classList.toggle("role-access-hide",!hasSelection);
+  document.querySelectorAll("#app > .grid, #app > .two, #app > .three, #app > section.section").forEach(el=>{
+    el.classList.toggle("pre-filter-hide",!hasSelection);
+  });
+
+  // Role-specific module restrictions.
+  const hideWords=[];
+  if(loginRole==="TL"){
+    hideWords.push(
+      "csm command board","csm summary","csm leaderboard","zsm leaderboard",
+      "management hierarchy","data quality","management coverage"
+    );
+    // TL must never see higher-management hierarchy counters.
+    ["hCSM","hZSM"].forEach(id=>$(id)?.closest(".card")?.classList.add("role-access-hide"));
+  } else if(loginRole==="CSM"){
+    hideWords.push("zsm leaderboard","tl leaderboard","csm summary");
+    ["hZSM","hTL"].forEach(id=>$(id)?.closest(".card")?.classList.add("role-access-hide"));
+  } else if(loginRole==="ZSM"){
+    // ZSM must be able to see and review their CSM performance.
+    // CSM Command Board, CSM Summary and CSM Leaderboard stay visible.
+    // Keep TL-level management boards restricted here as before.
+    hideWords.push("tl command board","tl leaderboard");
+  }
+  cards.forEach(c=>{
+    const t=text(c);
+    if(hideWords.some(w=>t.includes(w))) c.classList.add("role-access-hide");
+  });
+
+  // Keep role tabs locked to the authenticated role.
+  document.querySelectorAll(".leveltab").forEach(b=>{
+    const allowed =
+      loginRole==="TL"
+        ? (b.dataset.level==="TL"||b.dataset.level==="Promoter")
+        : loginRole==="ZSM" || loginRole==="CSM"
+          ? (b.dataset.level===loginRole || b.dataset.level==="ParentCode")
+          : b.dataset.level===loginRole;
+    b.style.display=allowed?"inline-flex":"none";
+    b.style.pointerEvents=allowed?"auto":"none";
+  });
+}
+
+function isRetailerScope(){
+ const scope=getSelectedScope();
+ // Management ranking scope: ZSM/CSM/Parent Code are retailer views.
+ // TL remains promoter/employee-focused for ranking and action sections.
+ return activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode";
+}
+function isRetailerProductScope(){
+ const scope=getSelectedScope();
+ return activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode"||activeLevel==="TL"||!!scope.tl;
+}
+function renderRoleView(){
+ const cfg=roleViews[activeLevel]||roleViews.Promoter;
+ $("tabHint").textContent=cfg.hint;
+
+ $("roleView").innerHTML=cfg.cards.map(x=>`<div class="rolemini"><b>${x[0]} ${x[1]}</b><span>${x[2]}</span></div>`).join("");
+ // Make the main retailer/promoter sections clearly role-oriented.
+ const prodCard=document.querySelector("#products")?.closest(".card");
+ if(prodCard)prodCard.querySelector(".sectionhead h2").textContent=isRetailerProductScope()?"📱 Retailer Product Sellout Matrix":"📱 Product Sellout Matrix";
+ const noteCard=document.querySelector("#notes")?.closest(".card");
+ if(noteCard)noteCard.querySelector(".sectionhead h2").textContent=isRetailerScope()?"📝 Note Series Retailer Performance":"📝 Note Series Performance";
+ const retailHead=document.querySelector("#retailLead")?.closest(".card");
+ const perfHead=document.querySelector("#perf")?.closest(".card");
+ if(retailHead)retailHead.querySelector("h2").textContent=activeLevel==="TL"||activeLevel==="Promoter"?"🏪 Retailer Intelligence":"🏪 Retailer Management";
+ if(perfHead)perfHead.querySelector("h2").textContent=isRetailerScope()?"📊 Retailer Performance":activeLevel==="ParentCode"?"📊 Parent Code Performance":"👤 Promoter Performance";
+}
+function setActiveLevel(level){
+ activeLevel=level;
+ document.querySelectorAll(".leveltab").forEach(b=>b.classList.toggle("active",b.dataset.level===level));
+ renderRoleView();
+ applyRoleVisibility();
+ buildFilters(false);render();applyRoleVisibility();
+}
+document.querySelectorAll(".leveltab").forEach(b=>b.onclick=()=>setActiveLevel(b.dataset.level));
+
+
+
+function v2ScopeRows(){
+  // Current filtered promoter rows are the common hierarchy base.
+  return Array.isArray(filtered)?filtered:[];
+}
+function v2NumField(r,c){return c?num(r[c]):0}
+function v2Col(...names){
+  for(const n of names){
+    const i=headers.findIndex(h=>norm(h)===norm(n));
+    if(i>=0)return headers[i];
+  }
+  return null;
+}
+function v2Kpi(){
+  const data=v2ScopeRows();
+  // Use the dashboard's already-reconciled KPI values as the source of truth.
+  // The promoter dump has row-level achievement/volume fields, while TL/ZSM/CSM
+  // can have their official All Models MTD SO values in separate source sheets.
+  const parseMetric=(id)=>{
+    const el=$(id);
+    if(!el)return null;
+    const n=num(el.textContent);
+    return Number.isFinite(n)?n:null;
+  };
+  const domT=parseMetric("mTarget"), domA=parseMetric("mAch"), domV=parseMetric("mVol");
+  const t=v2Col("Target (Value)","Target"),
+        a=v2Col("MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement"),
+        v=v2Col("MTD ACH Volume\\n(Overall)","MTD ACH Volume (Overall)","MTD Volume (overall)","Volume");
+  const T=domT!=null?domT:data.reduce((s,r)=>s+v2NumField(r,t),0);
+  const A=domA!=null?domA:data.reduce((s,r)=>s+v2NumField(r,a),0);
+  const V=domV!=null?domV:data.reduce((s,r)=>s+v2NumField(r,v),0);
+  const ach=A/(T||1), gap=Math.max(0,T-A);
+  const reportDate=window.__reportDate instanceof Date&&!isNaN(window.__reportDate)?window.__reportDate:new Date();
+  const daysInMonth=new Date(reportDate.getFullYear(),reportDate.getMonth()+1,0).getDate();
+  const day=Math.max(1,reportDate.getDate());
+  const drr=A/day, req=Math.max(0,(T-A)/(daysInMonth-day||1)), proj=drr*daysInMonth;
+  return {T,A,V,ach,gap,drr,req,proj,daysLeft:daysInMonth-day,rows:data.length};
+}
+function v2Status(ach){
+  if(ach>=1)return ["v2-good","🟢 Ahead"];
+  if(ach>=.75)return ["v2-good","🟢 On Track"];
+  if(ach>=.5)return ["v2-warn","🟡 At Risk"];
+  return ["v2-bad","🔴 Critical"];
+}
+function renderV2(){
+  const k=v2Kpi(), [cls,status]=v2Status(k.ach);
+  const isRetail=activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode";
+  const entity=isRetail?"Retailer":activeLevel==="ParentCode"?"Parent Code":activeLevel==="TL"||activeLevel==="Promoter"?"Promoter":"Employee";
+  const cards=[
+    ["🎯","Target",money(k.T),""],
+    ["✅","Achievement",money(k.A),pct(k.ach)],
+    ["📦","Volume",k.V.toLocaleString("en-IN"),""],
+    ["📈","Current DRR",money(k.drr),"per day"],
+    ["⚡","Required DRR",money(k.req),"per remaining day"],
+    ["🔮","Month Projection",money(k.proj),`vs ${money(k.T)} target`],
+    ["⚠️","Gap",money(k.gap),"remaining"],
+    ["👥",entity+" Records",k.rows.toLocaleString("en-IN"),status]
+  ];
+  $("v2Kpis").innerHTML=cards.map(x=>`<div class="v2-card ${x[0]==="⚠️"&&k.gap>0?"v2-warn":""}"><div class="k">${x[0]} ${x[1]}</div><div class="v">${x[2]}</div><div class="s">${esc(x[3])}</div></div>`).join("");
+  $("v2Mode").textContent=`${activeLevel} • ${status} • ${k.daysLeft} day(s) left`;
+  const alerts=[];
+  if(k.gap>0)alerts.push(["🎯 Target Gap",`${money(k.gap)} remaining to target`]);
+  if(k.req>k.drr*1.25)alerts.push(["🔴 DRR Alert",`Required DRR is ${money(k.req)} vs current ${money(k.drr)}`]);
+  if(k.V===0)alerts.push(["📦 Zero Volume","No volume recorded in current filtered view"]);
+  if(k.rows===0)alerts.push(["⚠️ No Records","Selected filters returned no records"]);
+  if(!alerts.length)alerts.push(["🟢 Healthy Pace","Current filtered performance is on a healthy track"]);
+  $("v2Alerts").innerHTML=alerts.map(x=>`<div class="v2-alert"><b>${esc(x[0])}</b><small>${esc(x[1])}</small></div>`).join("");
+}
+function v2Reconcile(){
+  const rows=v2ScopeRows();
+  const totalA=num($("mAch")?.textContent||"0");
+  const totalV=num($("mVol")?.textContent||"0");
+  const msg=`Filtered scope: ${rows.length} row(s) • Achievement: ${money(totalA)} • Volume: ${totalV.toLocaleString("en-IN")} • Source hierarchy: ZSM → CSM → TL → Promoter → Retailer`;
+  alert("🔄 Reconcile All\n\n"+msg+"\n\nProduct totals use All Models MTD SO / Total SO source mapping.");
+}
+function v2Export(){
+  const rows=v2ScopeRows(); if(!rows.length){alert("No filtered rows to export.");return;}
+  const cols=headers, lines=[cols.map(x=>`"${String(x??"").replace(/"/g,'""')}"`).join(",")];
+  rows.forEach(r=>lines.push(cols.map((_,i)=>`"${String(r[i]??"").replace(/"/g,'""')}"`).join(",")));
+  const blob=new Blob([lines.join("\n")],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob), a=document.createElement("a");
+  a.href=url;a.download=`TAUSIF_${activeLevel}_Filtered_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function v2Search(){
+  const q=norm($("v2Search")?.value||"");
+  if(!q){render();return;}
+  const fields=["Parent_Code","Parent_Code","Parent Code","ParentCode","Parent Code ID","Emp Name","Retailer Name","TL","ZSM","CH / CSM/KAM","CSM","CSM Name"];
+  filtered=rows.filter(r=>fields.some(f=>headers.includes(f)&&norm(r[f]).includes(q)));
+  renderV2();
+}
+
+
+function showActionDetails(type){
+  const d=managementPerformanceData(
+    first(["Target (Value)","Target"]),
+    first(["MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement (Value)","Achievement"]),
+    first(["MTD ACH Volume (Overall)","MTD ACH Vol. (All Models)","Volume"])
+  );
+  const isRetail=isRetailerScope();
+  const entity=isRetail?"Retailer":"Employee";
+  const scopeParts=Object.entries(getSelectedFilters()).filter(([_,v])=>v).map(([k,v])=>`${k}: ${v}`);
+  const scope=scopeParts.length?scopeParts.join(" • "):activeLevel;
+  let title="", subtitle="", list=[], empty="";
+  if(type==="low30"){
+    title="🔴 Attention Required";
+    subtitle=`${entity}s below 30% achievement • ${scope}`;
+    list=d.filter(x=>x.p<.3).sort((a,b)=>b.gap-a.gap);
+    empty=`🟢 No ${entity.toLowerCase()} below 30% in the current scope.`;
+  }else if(type==="zeroVolume"){
+    title="📦 Zero Volume";
+    subtitle=`${entity}s with zero recorded volume • ${scope}`;
+    list=d.filter(x=>Number(x.v||0)===0).sort((a,b)=>b.gap-a.gap);
+    empty=`🟢 No ${entity.toLowerCase()} with zero recorded volume in the current scope.`;
+  }else if(type==="leader"){
+    title="🏆 Current Leader";
+    subtitle=`Top ${entity.toLowerCase()} by achievement • ${scope}`;
+    list=d.slice().sort((a,b)=>b.p-a.p).slice(0,10);
+    empty=`No ${entity.toLowerCase()} records found in the current scope.`;
+  }else if(type==="focusGap"){
+    title="🎯 Focus Gap";
+    subtitle=`Largest ${entity.toLowerCase()} target gaps • ${scope}`;
+    list=d.slice().sort((a,b)=>b.gap-a.gap).slice(0,15);
+    empty=`No ${entity.toLowerCase()} gaps found in the current scope.`;
+  }else return;
+
+  let modal=document.getElementById("actionDetailModal");
+  if(!modal){
+    modal=document.createElement("div");
+    modal.id="actionDetailModal";
+    modal.innerHTML=`<div class="action-modal-backdrop" data-close-action></div>
+      <div class="action-modal" role="dialog" aria-modal="true" aria-labelledby="actionDetailTitle">
+        <div class="action-modal-head">
+          <div><div id="actionDetailTitle" class="action-modal-title"></div><div id="actionDetailScope" class="action-modal-sub"></div></div>
+          <button class="btn" type="button" data-close-action>✕</button>
+        </div>
+        <div id="actionDetailBody"></div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById("actionDetailTitle").textContent=title;
+  document.getElementById("actionDetailScope").textContent=subtitle;
+  document.getElementById("actionDetailBody").innerHTML=list.length
+    ? list.map((x,i)=>`<div class="action-detail-row">
+        <div><b>${type==="leader"?`${i+1}. `:""}${esc(x.n)}</b><small>Target ${money(x.t)} • Achievement ${money(x.a)} • Volume ${Number(x.v||0).toLocaleString("en-IN")}</small></div>
+        <span class="pill ${x.p<.3?"bad":"good"}">${pct(x.p)}</span>
+      </div>`).join("")
+    : `<div class="empty">${empty}</div>`;
+  modal.classList.add("show");
+}
+function closeActionDetails(){
+  const m=document.getElementById("actionDetailModal");
+  if(m)m.classList.remove("show");
+}
+
+document.addEventListener("click",e=>{
+  if(e.target.id==="v2Reconcile")v2Reconcile();
+  if(e.target.id==="v2Export")v2Export();
+});
+
+document.addEventListener("click",e=>{
+  const trigger=e.target.closest?.("[data-action-detail]");
+  if(trigger){
+    e.preventDefault();
+    showActionDetails(trigger.dataset.actionDetail);
+    return;
+  }
+  if(e.target.closest?.("[data-close-action]")){
+    e.preventDefault();
+    closeActionDetails();
+  }
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ closeActionDetails(); return; }
+  const trigger=e.target.closest?.("[data-action-detail]");
+  if(trigger && (e.key==="Enter" || e.key===" ")){
+    e.preventDefault();
+    showActionDetails(trigger.dataset.actionDetail);
+  }
+});
+
+document.addEventListener("input",e=>{
+  if(e.target.id==="v2Search")v2Search();
+});
+
+function v3Unique(field){
+  const c=v2Col(field);
+  return c?[...new Set(v2ScopeRows().map(r=>String(r[c]??"").trim()).filter(Boolean))]:[];
+}
+function v3RowsBy(field){
+  // Role-correct source: ZSM/CSM use OL retailer data; TL/Promoter use Promoter Dump.
+  if((activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode") && field==="Retailer Name") {
+    const d=retailerDataForManagement(
+      first(["Target (Value)","Target"]),
+      first(["MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement (Value)","Achievement"]),
+      first(["MTD ACH Volume\n(Overall)","MTD ACH Volume (Overall)","MTD Volume (overall)","Volume"])
+    );
+    return d.map(x=>({name:x.n,rows:[],ach:x.a,target:x.t,vol:x.v,pct:x.p}));
+  }
+  const c=v2Col(field); if(!c)return [];
+  const map=new Map();
+  v2ScopeRows().forEach(r=>{
+    const n=String(r[c]??"").trim(); if(!n)return;
+    if(!map.has(n))map.set(n,{name:n,rows:[],ach:0,target:0,vol:0});
+    const x=map.get(n);
+    // Promoter Dump's real headers are used here; do not fall back to a generic
+    // "Achievement" column because that can be a different metric/block.
+    const a=v2Col("MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement (Value)","Achievement");
+    const t=v2Col("Target (Value)","Target");
+    const v=v2Col("MTD ACH Volume\n(Overall)","MTD ACH Volume (Overall)","MTD Volume (overall)","Volume");
+    x.ach+=v2NumField(r,a);x.target+=v2NumField(r,t);x.vol+=v2NumField(r,v);x.rows.push(r);
+  });
+  return [...map.values()].map(x=>({...x,pct:x.ach/(x.target||1)}));
+}
+function v3RenderTrend(){
+  const box=$("v3Trend"),labs=$("v3TrendLabels"); if(!box)return;
+  const data=v2ScopeRows(), dateCol=v2Col("Date","Report Date","Report Date/Time");
+  // If the uploaded dump has no daily date column, show a transparent "not available" state
+  // rather than inventing daily values.
+  if(!dateCol){
+    box.innerHTML='<div class="v3-muted" style="align-self:center">Daily date-wise sellout is not present in the current source.</div>';
+    labs.innerHTML="";
+    $("v3TrendSub").textContent="No daily date column detected — no fabricated trend";
+    return;
+  }
+  const ach=v2Col("Achievement (Value)","Achievement");
+  const m=new Map();
+  data.forEach(r=>{const d=String(r[dateCol]??"").trim();if(!d)return;m.set(d,(m.get(d)||0)+v2NumField(r,ach));});
+  const arr=[...m.entries()].slice(-15);
+  if(!arr.length){box.innerHTML='<div class="v3-muted">No dated sellout rows.</div>';labs.innerHTML="";return;}
+  const mx=Math.max(...arr.map(x=>x[1]),1);
+  box.innerHTML=arr.map(x=>`<div class="v3-bar" title="${esc(x[0])}: ${money(x[1])}" style="height:${Math.max(4,Math.round(x[1]/mx*100))}%"></div>`).join("");
+  labs.innerHTML=arr.map(x=>`<span>${esc(x[0].slice(0,5))}</span>`).join("");
+}
+function v3RenderProductivity(){
+  const rr=v3RowsBy("Retailer Name");
+  const pp=v3RowsBy("Emp Name");
+  const activeR=rr.filter(x=>x.ach>0).length, zeroR=rr.filter(x=>x.ach===0).length;
+  const activeP=pp.filter(x=>x.ach>0).length, zeroP=pp.filter(x=>x.ach===0).length;
+  const avgR=rr.length?rr.reduce((s,x)=>s+x.ach,0)/rr.length:0;
+  const avgP=pp.length?pp.reduce((s,x)=>s+x.ach,0)/pp.length:0;
+  $("v3Retailer").innerHTML=[
+    ["Total Retailers",rr.length.toLocaleString("en-IN")],
+    ["Active Retailers",activeR.toLocaleString("en-IN")],
+    ["Zero Sellout",zeroR.toLocaleString("en-IN")],
+    ["Avg Sellout / Retailer",money(avgR)],
+    ["Top Retailer",rr.sort((a,b)=>b.ach-a.ach)[0]?.name||"—"]
+  ].map(x=>`<div class="v3-row"><span>${esc(x[0])}</span><b>${esc(x[1])}</b></div>`).join("");
+  $("v3Promoter").innerHTML=[
+    ["Total Promoters",pp.length.toLocaleString("en-IN")],
+    ["Active Promoters",activeP.toLocaleString("en-IN")],
+    ["Zero Sellout",zeroP.toLocaleString("en-IN")],
+    ["Avg Sellout / Promoter",money(avgP)],
+    ["Top Promoter",pp.sort((a,b)=>b.ach-a.ach)[0]?.name||"—"]
+  ].map(x=>`<div class="v3-row"><span>${esc(x[0])}</span><b>${esc(x[1])}</b></div>`).join("");
+}
+function v3RenderGap(){
+  const k=v2Kpi();
+  const isRetailMode=isRetailerScope();
+  const rr=v3RowsBy("Retailer Name");
+  const pp=isRetailMode?[]:v3RowsBy("Emp Name");
+  const lowR=rr.filter(x=>x.pct<.3).length, lowP=pp.filter(x=>x.pct<.3).length;
+  const zeroR=rr.filter(x=>x.ach===0).length, zeroP=pp.filter(x=>x.ach===0).length;
+  $("v3GapSummary").textContent=`${money(k.gap)} gap in current ${activeLevel} scope. Focus is automatically ranked from the correct role source.`;
+  const acts=[];
+  if(isRetailMode){
+    if(zeroR)acts.push(["🔴 Zero-sellout retailers",`${zeroR} retailer(s) have no recorded achievement.` ,"v3-bad"]);
+    if(lowR)acts.push(["🟠 Low-performing retailers",`${lowR} retailer(s) are below 30% achievement.` ,"v3-warn"]);
+  }else{
+    if(zeroP)acts.push(["🔴 Zero-volume promoters",`${zeroP} promoter(s) have no recorded achievement.` ,"v3-bad"]);
+    if(lowP)acts.push(["🟠 Low-performing promoters",`${lowP} promoter(s) are below 30% achievement.` ,"v3-warn"]);
+    if(zeroR)acts.push(["🔴 Zero-sellout retailers",`${zeroR} retailer(s) have no recorded achievement.` ,"v3-bad"]);
+    if(lowR)acts.push(["🟠 Low-performing retailers",`${lowR} retailer(s) are below 30% achievement.` ,"v3-warn"]);
+  }
+  if(!acts.length)acts.push(["🟢 No critical issue detected","Current filtered scope has no automatic red flags.","v3-good"]);
+  $("v3Actions").innerHTML=acts.slice(0,6).map(x=>`<div class="v3-action"><b>${esc(x[0])} <span class="v3-pill ${x[2]}">ACTION</span></b><small>${esc(x[1])}</small></div>`).join("");
+}
+function renderV3(){
+  v3RenderTrend();v3RenderProductivity();v3RenderGap();
+}
+
+function v4Rows(){return Array.isArray(filtered)?filtered:[]}
+function v4Actual(row){const c=v2Col("Achievement (Value)","Achievement","MTD Value Achivement (Overall)","MTD Value Achievement (Overall)");return v2NumField(row,c)}
+function v4Target(row){const c=v2Col("Target (Value)","Target");return v2NumField(row,c)}
+function v4Volume(row){const c=v2Col("MTD ACH Volume\n(Overall)","MTD ACH Volume (Overall)","Volume");return v2NumField(row,c)}
+function v4RenderRecon(){
+ const r=v4Rows(), t=r.reduce((s,x)=>s+v4Target(x),0), a=r.reduce((s,x)=>s+v4Actual(x),0);
+ let v=r.reduce((s,x)=>s+v4Volume(x),0);
+ if(activeLevel==='TL'){
+   const ol=sourceProductRows(sourceSheetName('OL'),getSelectedScope());
+   const sh=ol && window.__sourceSheets?.[ol.sheetName];
+   const totalIdx=sh?.headers?.findIndex(h=>norm(h)==='total so');
+   if(ol && sh && totalIdx>=0) v=ol.data.reduce((sum,row)=>sum+num(row[totalIdx]),0);
+ }
+ const k=v2Kpi();
+ const checks=[
+  ["Filtered rows",r.length,"OK"],
+  ["Target",money(t),t>=0?"OK":"CHECK"],
+  ["Achievement",money(a),a>=0?"OK":"CHECK"],
+  ["Volume",v.toLocaleString("en-IN"),v>=0?"OK":"CHECK"],
+  ["Target gap",money(Math.max(0,t-a)),t>=a?"OPEN":"AHEAD"],
+  ["Hierarchy","ZSM → CSM → TL → Promoter → Retailer","LOCKED"]
+ ];
+ $("v4Recon").innerHTML=checks.map(x=>`<div class="v4-item ${x[2]==="OK"||x[2]==="LOCKED"?"v4-good":""}"><b>${esc(x[0])}: ${esc(String(x[1]))}</b><small>Status: ${esc(x[2])}</small></div>`).join("");
+}
+function v4RenderGrowth(){
+ const k=v2Kpi();
+ const pace=k.T?Math.min(1,k.A/k.T):0;
+ const projected=k.proj;
+ const gap=Math.max(0,k.T-k.A);
+ $("v4Growth").innerHTML=[
+  ["Current Achievement",money(k.A),pct(pace)],
+  ["Current DRR",money(k.drr),"per day"],
+  ["Required DRR",money(k.req),"remaining days"],
+  ["Month Projection",money(projected),projected>=k.T?"Target pace":"Below target pace"],
+  ["Projected Gap/Surplus",money(Math.abs(projected-k.T)),projected>=k.T?"Surplus":"Shortfall"]
+ ].map(x=>`<div class="v4-item"><b>${esc(x[0])}: ${esc(x[1])}</b><small>${esc(x[2])}</small></div>`).join("");
+}
+function v4RenderAlerts(){
+ const k=v2Kpi(), rr=v3RowsBy("Retailer Name"), pp=v3RowsBy("Emp Name");
+ const alerts=[];
+ const zeroP=pp.filter(x=>x.ach===0).length, lowP=pp.filter(x=>x.pct<.3).length;
+ const zeroR=rr.filter(x=>x.ach===0).length, lowR=rr.filter(x=>x.pct<.3).length;
+ if(zeroP)alerts.push(["🔴",`${zeroP} zero-sellout promoters`,"Immediate promoter action","v4-bad"]);
+ if(zeroR)alerts.push(["🔴",`${zeroR} zero-sellout retailers`,"Retailer activation required","v4-bad"]);
+ if(lowP)alerts.push(["🟠",`${lowP} promoters below 30%`,"Review promoter productivity","v4-warn"]);
+ if(lowR)alerts.push(["🟠",`${lowR} retailers below 30%`,"Review retailer productivity","v4-warn"]);
+ if(k.req>k.drr*1.25)alerts.push(["🔴","Required DRR is materially higher","Increase daily run-rate","v4-bad"]);
+ if(!alerts.length)alerts.push(["🟢","No critical alerts","Current filtered scope is healthy","v4-good"]);
+ $("v4Alerts").innerHTML=alerts.slice(0,8).map(x=>`<div class="v4-item ${x[3]}"><b>${x[0]} ${esc(x[1])}</b><small>${esc(x[2])}</small></div>`).join("");
+}
+function v4RenderActions(){
+ const k=v2Kpi(), rr=v3RowsBy("Retailer Name"), pp=v3RowsBy("Emp Name");
+ const actions=[];
+ pp.filter(x=>x.ach===0).sort((a,b)=>b.target-a.target).slice(0,3).forEach(x=>actions.push([`Activate promoter: ${x.name}`,`Target ${money(x.target)} • current achievement ${money(x.ach)}`]));
+ rr.filter(x=>x.ach===0).sort((a,b)=>b.target-a.target).slice(0,3).forEach(x=>actions.push([`Activate retailer: ${x.name}`,`Target ${money(x.target)} • current achievement ${money(x.ach)}`]));
+ if(k.gap>0)actions.push(["Close today's target gap",`Current gap ${money(k.gap)} • required DRR ${money(k.req)}`]);
+ if(!actions.length)actions.push(["Maintain current pace","No immediate critical action generated."]);
+ $("v4Actions").innerHTML=actions.slice(0,6).map((x,i)=>`<div class="v4-item ${i<2?"v4-warn":""}"><b>${i+1}. ${esc(x[0])}</b><small>${esc(x[1])}</small></div>`).join("");
+}
+function renderV4(){v4RenderRecon();v4RenderGrowth();v4RenderAlerts();v4RenderActions();}
+document.addEventListener("click",e=>{if(e.target.id==="v4Reconcile")v4RenderRecon();});
+
+
+function waSnapshotData(){
+ const k=v2Kpi(), rr=v3RowsBy("Retailer Name"), pp=v3RowsBy("Emp Name");
+ const sel=getSelectedFilters();
+ const scope=Object.entries(sel).filter(([_,v])=>v).map(([a,v])=>`${a}: ${v}`).join(" • ")||activeLevel;
+ const topP=pp.sort((a,b)=>b.ach-a.ach).slice(0,3);
+ const topR=rr.sort((a,b)=>b.ach-a.ach).slice(0,3);
+ return {k,scope,topP,topR,zeroP:pp.filter(x=>x.ach===0).length,zeroR:rr.filter(x=>x.ach===0).length};
+}
+function makeSnapshotBlob(){
+ const d=waSnapshotData(), k=d.k;
+ const escSvg=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+ const val=(fn,n)=>{try{return String(fn(n)??"")}catch(e){return String(n??"")}};
+ const cards=[
+  ["TARGET",val(money,k.T)],["ACHIEVEMENT",val(money,k.A)],["ACH %",val(pct,k.ach)],["VOLUME",Number(k.V||0).toLocaleString("en-IN")],
+  ["CURRENT DRR",val(money,k.drr)],["REQUIRED DRR",val(money,k.req)],["PROJECTION",val(money,k.proj)],["GAP",val(money,k.gap)]
+ ];
+ const cardSvg=cards.map((z,i)=>{
+   const col=i%4,row=Math.floor(i/4),cx=55+col*280,cy=125+row*105;
+   return `<rect x="${cx}" y="${cy}" width="255" height="82" rx="12" fill="#181d27" stroke="#293241"/>
+   <text x="${cx+16}" y="${cy+25}" fill="#9aa4b2" font-size="13" font-family="Arial,sans-serif">${escSvg(z[0])}</text>
+   <text x="${cx+16}" y="${cy+58}" fill="#ffffff" font-size="23" font-weight="700" font-family="Arial,sans-serif">${escSvg(z[1])}</text>`;
+ }).join("");
+ const actions=[
+  `Zero-sellout promoters: ${d.zeroP}`,
+  `Zero-sellout retailers: ${d.zeroR}`,
+  `Top promoters: ${d.topP.map(a=>a.name).join(", ")||"—"}`,
+  `Top retailers: ${d.topR.map(a=>a.name).join(", ")||"—"}`
+ ];
+ const actionSvg=actions.map((a,i)=>`<rect x="55" y="${375+i*62}" width="1090" height="45" rx="9" fill="#1a202b" stroke="#293241"/>
+ <text x="72" y="${404+i*62}" fill="#ffffff" font-size="15" font-family="Arial,sans-serif">${escSvg(a)}</text>`).join("");
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820">
+ <rect width="1200" height="820" fill="#10131a"/>
+ <text x="55" y="65" fill="#ffffff" font-size="34" font-weight="700" font-family="Arial,sans-serif">TAUSIF SALES COMMAND CENTER</text>
+ <text x="55" y="94" fill="#9aa4b2" font-size="16" font-family="Arial,sans-serif">${escSvg(d.scope)}</text>
+ ${cardSvg}
+ <text x="55" y="355" fill="#ffffff" font-size="20" font-weight="700" font-family="Arial,sans-serif">TODAY'S ACTION</text>
+ ${actionSvg}
+ <text x="55" y="765" fill="#7f8a9b" font-size="12" font-family="Arial,sans-serif">Generated from current dashboard filters • Source logic preserved</text>
+ </svg>`;
+ return new Promise((resolve,reject)=>{
+   const blob=new Blob([svg],{type:"image/svg+xml"});
+   const url=URL.createObjectURL(blob), img=new Image();
+   img.onload=()=>{
+     const c=document.createElement("canvas");c.width=1200;c.height=820;
+     const ctx=c.getContext("2d");ctx.drawImage(img,0,0);
+     URL.revokeObjectURL(url);
+     c.toBlob(b=>b?resolve(b):reject(new Error("Snapshot PNG creation failed")),"image/png");
+   };
+   img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Snapshot rendering failed"));};
+   img.src=url;
+ });
+}
+async function waSnapshot(){
+ const blob=await makeSnapshotBlob();
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");a.href=url;a.download=`TAUSIF_${activeLevel}_Snapshot_${new Date().toISOString().slice(0,10)}.png`;
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ return blob;
+}
+async function waShare(){
+ const blob=await makeSnapshotBlob();
+ const msg=$("waPreview").value||(()=>{waGenerate();return $("waPreview").value;})();
+ const file=new File([blob],`TAUSIF_${activeLevel}_Snapshot.png`,{type:"image/png"});
+ if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+   try{await navigator.share({title:"TAUSIF Sales Update",text:msg,files:[file]});return;}catch(e){}
+ }
+ await waSnapshot();
+ await navigator.clipboard?.writeText(msg);
+ alert("📸 Snapshot saved and message copied. WhatsApp open karke image + message share kar sakte ho.");
+}
+function waMoney(n){return money(n)}
+function waGenerate(){
+ const k=v2Kpi(), rr=v3RowsBy("Retailer Name"), pp=v3RowsBy("Emp Name");
+ const sel=getSelectedFilters();
+ const scopeParts=Object.entries(sel).filter(([_,v])=>v).map(([k,v])=>`${k}: ${v}`);
+ const scope=scopeParts.length?scopeParts.join(" • "):activeLevel;
+ const zeroP=pp.filter(x=>x.ach===0).length, lowP=pp.filter(x=>x.pct<.3).length;
+ const zeroR=rr.filter(x=>x.ach===0).length, lowR=rr.filter(x=>x.pct<.3).length;
+ const pace=k.proj>=k.T?"ON TRACK":"GAP TO COVER";
+ const msg=
+`🚀 *Sales Performance Update*
+
+📍 *Scope:* ${scope}
+
+🎯 *Target:* ${waMoney(k.T)}
+✅ *Achievement:* ${waMoney(k.A)} (${pct(k.ach)})
+📦 *Volume:* ${k.V.toLocaleString("en-IN")}
+📈 *Current DRR:* ${waMoney(k.drr)}
+⚡ *Required DRR:* ${waMoney(k.req)}
+🔮 *Projection:* ${waMoney(k.proj)}
+📌 *Status:* ${pace}
+
+🚨 *Action Points*
+• Zero-sellout Promoters: ${zeroP}
+• Promoters below 30%: ${lowP}
+• Zero-sellout Retailers: ${zeroR}
+• Retailers below 30%: ${lowR}
+
+🔥 *Today's Focus:* Close the target gap, maintain required DRR and activate zero-sellout points.
+
+💪 Let's push hard and finish strong!`;
+ $("waPreview").value=msg;
+}
+function waCopy(){
+ const el=$("waPreview");
+ if(!el.value)waGenerate();
+ navigator.clipboard?.writeText(el.value).then(()=>alert("✅ WhatsApp message copied."));
+}
+function waOpen(){
+ const el=$("waPreview");
+ if(!el.value)waGenerate();
+ const text=encodeURIComponent(el.value);
+ window.open("https://wa.me/?text="+text,"_blank");
+}
+document.addEventListener("click",e=>{
+ if(e.target.id==="waGenerate")waGenerate();
+ if(e.target.id==="waCopy")waCopy();
+ if(e.target.id==="waOpen")waOpen();
+ if(e.target.id==="waSnapshot")waSnapshot();
+ if(e.target.id==="waShare")waShare();
+});
+function runDataQuality(){
+  const rows=[];
+  const sheets=window.__sourceSheets||{};
+  const keys=Object.keys(sheets);
+  const has=(term)=>keys.some(k=>norm(k).includes(norm(term)));
+  const promoterKey=keys.find(k=>norm(k).includes("promoter"));
+  const promoterSheet=promoterKey?sheets[promoterKey]:null;
+  const hasCSMInPromoter=!!(promoterSheet?.headers?.some(h=>norm(h)==="ch / csm/kam" || norm(h)==="csm" || norm(h)==="csm name"));
+  const checks=[
+    ["Promoter source",has("promoter"),"Promoter Dump"],
+    ["TL source",has("tl"),"TL / All Models MTD SO"],
+    ["ZSM source",has("zsm"),"ZSM / All Models MTD SO"],
+    ["CSM source",hasCSMInPromoter,"Promoter Dump → CH / CSM/KAM"],
+    ["OL retailer source",has("ol"),"OL / All Models MTD SO"]
+  ];
+  checks.forEach(x=>rows.push({ok:x[1],title:x[0],detail:x[1]?"Source available: "+x[2]:"Required source sheet not detected"}));
+
+  // Detect duplicate employee/retailer IDs in the currently loaded promoter dump.
+  const pkey=keys.find(k=>norm(k).includes("promoter"));
+  const psh=pkey?sheets[pkey]:null;
+  if(psh?.headers){
+    const idIdx=psh.headers.findIndex(h=>norm(h)==="emp mi id");
+    if(idIdx>=0){
+      const seen=new Set(),dup=new Set();
+      (psh.rows||[]).forEach(r=>{const v=clean(r[idIdx]);if(!v)return; if(seen.has(v))dup.add(v); seen.add(v)});
+      rows.push({ok:dup.size===0,title:"Duplicate Emp MI ID",detail:dup.size?dup.size+" duplicate ID(s) found":"No duplicate Emp MI IDs detected"});
+    }
+  }
+
+  const dq=document.getElementById("dqRows"), st=document.getElementById("dqStatus");
+  if(dq)dq.innerHTML=rows.map(x=>`<div class="dq-item ${x.ok?"dq-ok":"dq-bad"}"><b>${x.ok?"✅":"❌"} ${esc(x.title)}</b><small>${esc(x.detail)}</small></div>`).join("");
+  const bad=rows.filter(x=>!x.ok).length;
+  if(st)st.textContent=bad?`${bad} issue${bad>1?"s":""} found`:"All sources OK";
+}
+
+
+
+
+
+function updateKPI80Counts(people){
+ const o=people.filter(x=>x.overall>=.8).length;
+ const n=people.filter(x=>x.note>=.8).length;
+ const total=people.length;
+ if($("kpiOverall80Value"))$("kpiOverall80Value").textContent=`${o} / ${total}`;
+ if($("kpiNote80Value"))$("kpiNote80Value").textContent=`${n} / ${total}`;
+}
+function renderHierarchy80(){
+ const box=$("hierarchy80Tracker");
+ if(!box){
+   if($("kpiOverall80Value"))$("kpiOverall80Value").textContent="0 / 0";
+   if($("kpiNote80Value"))$("kpiNote80Value").textContent="0 / 0";
+   return;
+ }
+ const scope=(typeof activeLevel==="string"?activeLevel:"").toUpperCase();
+ const retailerMode=["ZSM","CSM","PARENT","PARENT CODE"].some(x=>scope.includes(x));
+ const tlMode=scope==="TL";
+ const empCol=v2Col("Emp Name","Employee Name","Promoter Name");
+ const idCol=v2Col("Emp ID","Emp Id","Employee ID","Employee Id");
+ const overallT=v2Col("Target (Value)","Target");
+ const overallA=v2Col("MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement (Value)","Achievement");
+ const noteT=v2Col("Note Series Target (Value)");
+ const noteA=v2Col("RN14 RN15 RN17 Series Ach (Value)");
+ const rows=v2ScopeRows();
+
+ if(!retailerMode && !tlMode){
+   box.style.display="none";
+   if($("kpiOverall80Value"))$("kpiOverall80Value").textContent="0 / 0";
+   if($("kpiNote80Value"))$("kpiNote80Value").textContent="0 / 0";
+   return;
+ }
+ box.style.display="";
+ let people=[], seen=new Set();
+
+ if(tlMode){
+   rows.forEach(r=>{
+     const name=clean(r[empCol]||r[idCol]||"").replace(/\s+/g," "); if(!name)return;
+     const key=clean(r[idCol]||name).toLowerCase(); if(seen.has(key))return; seen.add(key);
+     const ot=num(r[overallT]),oa=num(r[overallA]),nt=num(r[noteT]),na=num(r[noteA]);
+     people.push({name,overall:ot>0?oa/ot:0,note:nt>0?na/nt:0});
+   });
+   $("overall80Title").textContent="🎯 Promoters — Overall Achievement 80%+";
+   $("note80Title").textContent="📱 Promoters — Note Series 80%+";
+   $("overall80Sub").textContent="Promoters at or above 80% overall achievement";
+   $("note80Sub").textContent="Promoters at or above 80% Note Series achievement";
+ }else{
+   // ZSM / CSM / Parent Code = RETAILER scope.
+   // Denominator MUST come from the same filtered Promoter Dump used by the
+   // dashboard's "Retailers" coverage card (unique Retailer ID). This is why
+   // Bipin shows 301 retailers, not the 287 retailers present in OL.
+   const retailerIdCol=v2Col("Retailer ID","Retailer Id","OL Retailer ID");
+   const retailerNameCol=v2Col("Retailer Name","Retailer","Retailer Name / OL");
+   const scopeRetailers=new Map();
+   rows.forEach(r=>{
+     const id=retailerIdCol?clean(r[retailerIdCol]):"";
+     const name=retailerNameCol?clean(r[retailerNameCol]):"";
+     const key=(id||name).replace(/\\s+/g," ").trim().toLowerCase();
+     if(!key)return;
+     if(!scopeRetailers.has(key))scopeRetailers.set(key,{name:name||id,overall:0,note:0});
+   });
+
+   // Achievement comes from OL where available. Retailers missing from OL
+   // remain in the denominator with 0 achievement instead of disappearing.
+   const d=(typeof managementPerformanceData==="function")
+     ? (managementPerformanceData(overallT,overallA,v2Col("MTD ACH Volume\\n(Overall)","MTD ACH Volume (Overall)","Volume"))||[])
+     : [];
+   const perfByName=new Map();
+   d.forEach(x=>{
+     const key=String(x.n||"").replace(/\\s+/g," ").trim().toLowerCase();
+     if(key&&!perfByName.has(key))perfByName.set(key,Number(x.p)||0);
+   });
+
+   people=[...scopeRetailers.values()].map(x=>({
+     ...x,
+     overall:perfByName.get(String(x.name).replace(/\\s+/g," ").trim().toLowerCase())||0
+   }));
+
+   // Note Series uses the same full retailer denominator.
+   const groups=new Map();
+   rows.forEach(r=>{
+     const name=clean(r[retailerNameCol]||"").replace(/\\s+/g," ").trim();
+     if(!name)return;
+     const key=name.toLowerCase();
+     if(!groups.has(key))groups.set(key,{nt:0,na:0});
+     const g=groups.get(key);
+     g.nt+=num(r[noteT]); g.na+=num(r[noteA]);
+   });
+   people=people.map(x=>{
+     const g=groups.get(String(x.name).toLowerCase());
+     return {...x,note:g&&g.nt>0?g.na/g.nt:0};
+   });
+
+   $("overall80Title").textContent="🎯 Retailers — Overall Achievement 80%+";
+   $("note80Title").textContent="📱 Retailers — Note Series 80%+";
+   $("overall80Sub").textContent="Retailers at or above 80% overall achievement";
+   $("note80Sub").textContent="Retailers at or above 80% Note Series achievement";
+ }
+ const o=people.filter(x=>x.overall>=.8).length,n=people.filter(x=>x.note>=.8).length;
+ $("overall80Value").textContent=`${o} / ${people.length}`;
+ $("note80Value").textContent=`${n} / ${people.length}`;
+ updateKPI80Counts(people);
+}
+function renderTL80(){
+ const card=$("tl80Card");
+ if(!card)return;
+ if(activeLevel!=="TL"){card.style.display="none";return;}
+ card.style.display="";
+ const empCol=v2Col("Emp Name","Employee Name","Promoter Name");
+ const empIdCol=v2Col("Emp ID","Emp Id","Employee ID","Employee Id");
+ const overallT=v2Col("Target (Value)","Target");
+ const overallA=v2Col("MTD Value Achivement (Overall)","MTD Value Achievement (Overall)","Achievement (Value)","Achievement");
+ const noteT=v2Col("Note Series Target (Value)");
+ const noteA=v2Col("RN14 RN15 RN17 Series Ach (Value)");
+ const seen=new Set(), people=[];
+ v2ScopeRows().forEach(r=>{
+   const name=clean(r[empCol]||r[empIdCol]||"").replace(/\s+/g," ");
+   if(!name)return;
+   const key=clean(r[empIdCol]||name).toLowerCase();
+   if(seen.has(key))return;
+   seen.add(key);
+   const ot=num(r[overallT]), oa=num(r[overallA]), nt=num(r[noteT]), na=num(r[noteA]);
+   people.push({name,overall:ot>0?oa/ot:0,note:nt>0?na/nt:0});
+ });
+ const overall80=people.filter(x=>x.overall>=.8).length;
+ const note80=people.filter(x=>x.note>=.8).length;
+ $("tlOverall80").textContent=`${overall80} / ${people.length}`;
+ $("tlNote80").textContent=`${note80} / ${people.length}`;
+ $("tlOverall80Sub").textContent=`${overall80} promoter(s) have 80%+ overall achievement`;
+ $("tlNote80Sub").textContent=`${note80} promoter(s) have 80%+ Note Series achievement`;
+}
+
+function renderExecutiveOverview(){
+  const k=v2Kpi();
+  const sel=getSelectedFilters();
+  const chosen=Object.entries(sel).filter(([_,v])=>v).map(([key,val])=>`${key}: ${val}`);
+  const scope=chosen.length?chosen.join(' • '):`${activeLevel} • All`;
+  const [statusCls,statusText]=v2Status(k.ach);
+  const badge=document.getElementById('execStatus');
+  if(badge){badge.className=`exec-badge ${statusCls.replace('v2-','exec-')}`;badge.textContent=statusText;}
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('execScope',scope);set('execAch',pct(k.ach));set('execTarget',money(k.T));set('execMTD',money(k.A));set('execVolume',k.V.toLocaleString('en-IN'));set('execReqDRR',money(k.req));set('execGap',`Gap: ${money(k.gap)} • Current DRR: ${money(k.drr)}`);
+  const bar=document.getElementById('execProgress');if(bar)bar.style.width=Math.min(100,Math.max(0,k.ach*100))+'%';
+  const setBar=(id,v)=>{const e=document.getElementById(id);if(e)e.style.width=Math.min(100,Math.max(0,v*100))+'%';};
+  const setPct=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=Math.round(Math.max(0,v)*100)+'%';};
+  const oText=$('overall80Value')?.textContent||'0 / 0', nText=$('note80Value')?.textContent||'0 / 0';
+  const parseRatio=t=>{const m=t.match(/([0-9,]+)\s*\/\s*([0-9,]+)/);return m&&+m[2]?((+m[1].replace(/,/g,''))/(+m[2].replace(/,/g,''))):0;};
+  const overallRatio=parseRatio(oText), noteRatio=parseRatio(nText);
+  setBar('execSelloutBar',k.T?Math.min(1,k.A/k.T):0); setBar('execTargetBar',k.ach); setBar('exec80Bar',overallRatio); setBar('execNoteBar',noteRatio);
+  setPct('execSelloutPct',k.T?Math.min(1,k.A/k.T):0); setPct('execTargetPct',k.ach); setPct('exec80Pct',overallRatio); setPct('execNotePct',noteRatio);
+  set('execScore',`${pct(k.ach)} achievement`); set('execRingVal',pct(k.ach));
+  const ring=document.getElementById('execRing'); if(ring) ring.style.background=`conic-gradient(#21d4a4 ${Math.min(100,Math.max(0,k.ach*100))*3.6}deg,#293142 0deg)`;
+  const isRetail=['ZSM','CSM','ParentCode'].includes(activeLevel);
+  const coverage=isRetail?`${$('hRetail')?.textContent||0} retailers`:`${$('hProm')?.textContent||0} promoters • ${$('hRetail')?.textContent||0} retailers`;
+  set('execCoverage',coverage);
+  const o=$('overall80Value')?.textContent||'0 / 0',n=$('note80Value')?.textContent||'0 / 0';
+  set('exec80',`${o} overall • ${n} Note Series`);
+  const rr=isRetail?v3RowsBy('Retailer Name'):v3RowsBy('Emp Name');
+  const low=rr.filter(x=>x.pct<.3).length,zero=rr.filter(x=>x.ach===0).length;
+  let focus='Maintain pace';
+  if(k.req>k.drr*1.25)focus=`DRR gap: ${money(k.req-k.drr)} / day`;
+  else if(zero)focus=`Activate ${zero} zero-sellout ${isRetail?'retailers':'promoters'}`;
+  else if(low)focus=`Improve ${low} low-performing ${isRetail?'retailers':'promoters'}`;
+  else if(k.gap<=0)focus='Target achieved — push for surplus';
+  set('execFocus',focus);
+  const actions=[];
+  if(k.gap>0)actions.push(`🎯 ${money(k.gap)} target gap`);
+  if(k.req>k.drr)actions.push(`⚡ Need +${money(k.req-k.drr)} daily pace`);
+  if(low)actions.push(`🟠 ${low} below 30%`);
+  if(zero)actions.push(`🔴 ${zero} zero sellout`);
+  const box=document.getElementById('execActions');if(box)box.innerHTML=(actions.length?actions:['🟢 Scope is healthy']).slice(0,4).map(x=>`<span class="exec-action">${esc(x)}</span>`).join('');
+}
+
+function render(){
+  const renderRows=(currentAccess&&currentAccess.role!=="Admin")?rows.filter(accessMatch):rows;
+  applyParentCodeIsolation();
+ const sel=getSelectedFilters();
+ const allPairs=[
+  ["CSM",["CH / CSM/KAM","CSM","CSM Name","Customer Service Manager"]],
+  ["ZSM",["ZSM"]],["Zone",["Zone_1","Zone"]],["TL",["TL","Team Lead"]],
+  ["City",["City"]],["Emp Name",["Emp Name"]],["Retailer Name",["Retailer Name"]]
+ ];
+ filtered=renderRows.filter(r=>allPairs.every(([label,cands])=>{
+   const v=sel[label]||"",cc=resolveFilterColumn(cands);
+   return !v||!cc||clean(r[cc]).replace(/\s+/g," ")===v;
+ }));
+
+ filtered=renderRows.filter(r=>[...document.querySelectorAll(".filter select")].every(s=>!s.value||clean(r[s.dataset.col])===s.value));
+ let t=first(["Target (Value)","Target"]),a=first(["MTD Value Achivement (Overall)","MTD Value Achievement (Overall)"]),v=first(["MTD ACH Volume\n(Overall)","MTD ACH Volume (Overall)","Volume"]),nt=first(["Note Series Target (Value)"]),na=first(["RN14 RN15 RN17 Series Ach (Value)"]);
+ let T=filtered.reduce((z,r)=>z+num(r[t]),0),A=filtered.reduce((z,r)=>z+num(r[a]),0),V=filtered.reduce((z,r)=>z+num(r[v]),0),NT=filtered.reduce((z,r)=>z+num(r[nt]),0),NA=filtered.reduce((z,r)=>z+num(r[na]),0);
+ // Overall Volume must always use the main MTD ACH Volume (Overall) field.
+ // OL/Total SO is a separate reconciliation metric and must not replace Volume.
+ $("mTarget").textContent=money(T);$("mAch").textContent=money(A);$("mPct").textContent=pct(T?A/T:0);$("mGap").textContent=money(Math.max(0,T-A));$("mVol").textContent=V.toLocaleString("en-IN");$("mNote").textContent=pct(NT?NA/NT:0);
+ renderHierarchy();renderDRR(T,A,t,a,v,nt,na);renderCSM(t,a,v);renderTL(t,a,v);renderPerf(t,a,v);renderActions(t,a,v,nt,na);renderProducts();renderProductIntelligence();renderNotes(nt,na);renderTL80()
+
+  runDataQuality();
+
+  renderV2();
+
+  renderV3();
+
+  renderV4();
+
+ renderHierarchy80();
+  renderExecutiveOverview();
+}
+
+function workingDaysInMonth(year,month){let n=0,d=new Date(year,month,1);while(d.getMonth()===month){if(d.getDay()!==0)n++;d.setDate(d.getDate()+1)}return n}
+function workingDaysPassed(date){let n=0,d=new Date(date.getFullYear(),date.getMonth(),1);while(d<=date){if(d.getDay()!==0)n++;d.setDate(d.getDate()+1)}return n}
+function detectReportDate(){
+  // The uploaded workbook's Promoter Dump has the reporting date in row 2, column C.
+  // If unavailable, fall back to today's date.
+  let el=$("status"); return window.__reportDate || new Date();
+}
+function uniqueCountIn(data,colName,caseInsensitive=true){
+ if(!colName||!headers.includes(colName))return 0;
+ let s=new Set();
+ data.forEach(r=>{
+   let v=clean(r[colName]).replace(/\s+/g," ");
+   if(!v)return;
+   s.add(caseInsensitive?v.toLocaleLowerCase():v);
+ });
+ return s.size;
+}
+function renderHierarchy(){
+ let data=filtered;
+ let csm=col("CH / CSM/KAM")||col("CSM")||col("CSM Name")||col("Customer Service Manager");
+ let zsm=col("ZSM"), tl=col("TL")||col("Team Lead"), empId=col("Emp Mi ID")||col("Emp id"), retailerId=col("Retailer ID"), status=col("Status");
+
+ let csmN=uniqueCountIn(data,csm), zsmN=uniqueCountIn(data,zsm), tlN=uniqueCountIn(data,tl);
+ let promN=uniqueCountIn(data,empId,false), retN=uniqueCountIn(data,retailerId,false);
+ let active=0;
+ if(status&&empId){
+   let s=new Set();
+   data.forEach(r=>{
+     let id=clean(r[empId]);
+     if(id&&clean(r[status]).toLowerCase()==="active")s.add(id);
+   });
+   active=s.size;
+ }
+
+ $("hCSM").textContent=csmN;
+ $("hZSM").textContent=zsmN;
+ $("hTL").textContent=tlN;
+ $("hProm").textContent=promN;
+ $("hActive").textContent=active;
+ $("hRetail").textContent=retN;
+
+ $("hierarchySummary").innerHTML=
+  `<div class="alert"><b>🎯 Selected Scope</b><span class="mini">${data.length.toLocaleString("en-IN")} promoter records are currently in view.</span></div>
+   <div class="alert"><b>🧑‍💼 Management Coverage</b><span class="mini">${csmN} CSM • ${zsmN} ZSM • ${tlN} TL • ${promN} Promoters • ${retN} Retailers</span></div>
+   <div class="alert"><b>🟢 Active Promoter Coverage</b><span class="mini">${active} active promoters out of ${promN} (${promN?pct(active/promN):"0%"})</span></div>`;
+
+ $("dataQuality").innerHTML=
+   `<div class="alert"><b>🔎 Current Filter</b><span class="mini">All hierarchy counts above are based on the selected CSM/ZSM/Zone/TL/City/Employee/Retailer scope.</span></div>
+    <div class="alert"><b>👤 Promoter Count</b><span class="mini">Unique Emp Mi ID, so repeated retailer/product rows do not inflate promoter count.</span></div>
+    <div class="alert"><b>🏪 Retailer Count</b><span class="mini">Unique Retailer ID within the selected scope.</span></div>`;
+}
+
+function renderMgmtAnalytics(T,A,t,a,v){
+ const lmt=first(["LMTD Value","LMTD Value "]);
+ const target=t,ach=a;
+ // Current filtered scope growth.
+ let lmtVal=filtered.reduce((s,r)=>s+num(r[lmt]),0);
+ let growth=lmtVal?A/lmtVal-1:0;
+ $("growth").innerHTML=
+   `<div class="alert"><b>MTD Achievement</b><span class="mini">${money(A)}</span></div>
+    <div class="alert"><b>Last MTD Value</b><span class="mini">${money(lmtVal)}</span></div>
+    <div class="alert"><b>Growth vs LMTD</b><span class="mini">${lmtVal?(growth>=0?"🟢 ":"🔴 ")+pct(growth):"—"}</span></div>
+    <div class="alert"><b>Target Conversion</b><span class="mini">${T?pct(A/T):"0%"}</span></div>`;
+
+ const csm=col("CH / CSM/KAM")||col("CSM")||col("CSM Name");
+ const zsm=col("ZSM"), tl=col("TL")||col("Team Lead");
+ const makeLead=(id,key)=>{
+   if(!id)return [];
+   return group(filtered,id,[t,a,v]).map(x=>{
+     let vv=x[v]||0;
+     // Keep the same main Overall Volume metric used by the KPI.
+     return {n:x.key,t:x[t]||0,a:x[a]||0,v:vv,p:(x[a]||0)/(x[t]||1)};
+   }).sort((x,y)=>y.p-x.p);
+ };
+ const renderLead=(id,table)=>{
+   let d=makeLead(id);
+   $(table).innerHTML="<thead><tr><th>Name</th><th>Ach %</th><th>Achievement</th><th>Vol</th></tr></thead><tbody>"+
+     d.slice(0,10).map(x=>`<tr><td><b>${esc(x.n)}</b></td><td>${badge(x.p)}</td><td>${money(x.a)}</td><td>${x.v}</td></tr>`).join("")+
+     "</tbody>";
+ };
+ renderLead(csm,"csmLead");renderLead(zsm,"zsmLead");renderLead(tl,"tlLead");
+
+ // Retailer intelligence: unique retailer IDs, aggregated by retailer.
+ const rid=col("Retailer ID"), rn=col("Retailer Name");
+ if(rid){
+   let rm=new Map();
+   filtered.forEach(r=>{
+     let id=clean(r[rid]);if(!id)return;
+     if(!rm.has(id)){rm.set(id,{name:clean(r[rn])||id,t:0,a:0,v:0,emps:new Set()})}
+     let x=rm.get(id);x.t+=num(r[t]);x.a+=num(r[a]);x.v+=num(r[v]);
+     let eid=clean(r[col("Emp Mi ID")||""]);if(eid)x.emps.add(eid);
+   });
+   let rd=[...rm.values()].map(x=>({...x,p:x.a/(x.t||1),prom:x.emps.size})).sort((x,y)=>y.a-x.a);
+   $("retailLead").innerHTML="<thead><tr><th>Retailer</th><th>Target</th><th>Ach.</th><th>Ach %</th><th>Vol</th><th>Prom.</th></tr></thead><tbody>"+
+     rd.slice(0,15).map(x=>`<tr><td><b>${esc(x.name)}</b></td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td><td>${x.v}</td><td>${x.prom}</td></tr>`).join("")+"</tbody>";
+ }else $("retailLead").innerHTML="<tbody><tr><td class=empty>Retailer ID not detected.</td></tr></tbody>";
+
+ // Today's Focus.
+ let dd=window.__drr||{current:0,required:0,remain:0};
+ let d=group(filtered,"Emp Name",[t,a,v]).map(x=>({n:x.key,t:x[t]||0,a:x[a]||0,v:x[v]||0,p:(x[a]||0)/(x[t]||1)}));
+ let low=d.filter(x=>x.p<.3).length, zero=d.filter(x=>x.v===0).length, leader=[...d].sort((x,y)=>y.p-x.p)[0];
+ let proj=A+dd.current*dd.remain;
+ $("todayFocus").innerHTML=
+   `<div class="alert"><b>🎯 Today's / Next-Day Focus</b><span class="mini">Required DRR ${money(dd.required)} • Current DRR ${money(dd.current)}</span></div>
+    <div class="alert"><b>🔴 Promoters Below 30%</b><span class="mini">${low} employees need immediate action</span></div>
+    <div class="alert"><b>📦 Zero Volume</b><span class="mini">${zero} employees have zero recorded volume</span></div>
+    <div class="alert"><b>🏆 Current Leader</b><span class="mini">${leader?esc(leader.n)+" • "+pct(leader.p):"—"}</span></div>
+    <div class="alert"><b>🔮 Projection</b><span class="mini">${money(proj)} • ${T?pct(proj/T):"0%"} of target</span></div>`;
+}
+function renderDRR(T,A,t,a,v,nt,na){
+  let rd=detectReportDate(), y=rd.getFullYear(), m=rd.getMonth(), totalWD=workingDaysInMonth(y,m), passed=workingDaysPassed(rd), remain=Math.max(0,totalWD-passed);
+  let current=passed?A/passed:0, required=remain?Math.max(0,T-A)/remain:0, projection=A+current*remain, projPct=T?projection/T:0;
+  $("dDate").textContent=rd.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+  $("dMonth").textContent=rd.toLocaleDateString("en-IN",{month:"long",year:"numeric"});
+  $("dPassed").textContent=passed;$("dRemain").textContent=remain;$("dCurrent").textContent=money(current);$("dRequired").textContent=money(required);
+  $("dStatus").textContent=current>=required?"🟢 Pace is ahead":"🔴 Pace needs improvement";
+  let pace=current>=required? "good":"bad";
+  $("drrBars").innerHTML=`<div class="alert"><b>Current DRR</b><span class="mini">${money(current)} per working day</span></div>
+  <div class="alert"><b>Required DRR</b><span class="mini">${money(required)} per remaining working day</span></div>
+  <div class="alert"><b>DRR Cushion</b><span class="mini">${current>=required?money(current-required)+" above required pace":money(required-current)+" below required pace"}</span></div>
+  <div class="alert"><b>Working Days</b><span class="mini">${passed} passed • ${remain} remaining • ${totalWD} total</span></div>`;
+  $("projection").innerHTML=`<div class="alert"><b>Projected Month-End Achievement</b><span class="mini">${money(projection)} • ${pct(projPct)} of target</span></div>
+  <div class="alert"><b>Projected Gap / Surplus</b><span class="mini">${projection>=T?"🟢 Surplus ":"🔴 Shortfall "}${money(Math.abs(projection-T))}</span></div>
+  <div class="alert"><b>Run-Rate Verdict</b><span class="mini">${projection>=T?"Target is achievable at current pace.":"Current pace is below target; increase daily run-rate."}</span></div>`;
+  window.__drr={date:rd,totalWD,passed,remain,current,required,projection};
+  renderMgmtAnalytics(T,A,t,a,v);applyRoleVisibility();
+}
+function renderCSM(t,a,v){
+ let c=col("CH / CSM/KAM")||col("CSM")||col("CSM Name")||col("Customer Service Manager");
+ if(!c){
+   $("csm").innerHTML="<tbody><tr><td class=empty>CSM column not detected in this Excel.</td></tr></tbody>";
+   $("csmSummary").innerHTML='<div class="alert"><b>CSM data not found</b><span class="mini">CSM is read directly from the Promoter Dump "CH / CSM/KAM" column.</span></div>';
+   return;
+ }
+ let d=group(filtered,c,[t,a,v]).map(x=>({n:x.key,t:x[t]||0,a:x[a]||0,v:x[v]||0,p:(x[a]||0)/(x[t]||1)})).sort((x,y)=>y.p-x.p);
+ let dd=window.__drr||{passed:1,remain:1};
+ $("csm").innerHTML="<thead><tr><th>CSM</th><th>Target</th><th>Achievement</th><th>Ach %</th><th>Current DRR</th><th>Required DRR</th><th>Projection</th><th>Status</th></tr></thead><tbody>"+
+ d.map(x=>{
+   let cd=dd.passed?x.a/dd.passed:0,rd=dd.remain?Math.max(0,x.t-x.a)/dd.remain:0,pr=x.a+cd*dd.remain;
+   return `<tr><td><b>${esc(x.n)}</b></td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td><td>${money(cd)}</td><td>${money(rd)}</td><td>${money(pr)}</td><td>${pr>=x.t?"🟢 Ahead":"🔴 Focus"}</td></tr>`;
+ }).join("")+"</tbody>";
+ let best=d[0], weak=d[d.length-1];
+ $("csmSummary").innerHTML=
+ `<div class="alert"><b>🏆 Best CSM</b><span class="mini">${best?esc(best.n)+" • "+pct(best.p):"—"}</span></div>
+  <div class="alert"><b>⚠️ Lowest CSM</b><span class="mini">${weak?esc(weak.n)+" • "+pct(weak.p):"—"}</span></div>
+  <div class="alert"><b>👥 Total CSMs</b><span class="mini">${d.length}</span></div>`;
+}
+function renderTL(t,a,v){
+ const card=$("tl")?.closest(".card");
+ // TL view: show ONLY retailers mapped to the selected TL/scope.
+ if(activeLevel==="TL"){
+   if(card){
+     card.querySelector(".sectionhead h2").textContent="🏪 TL Retailer Command Board";
+     card.querySelector(".sectionhead span").textContent="Selected TL → mapped retailers only";
+   }
+   const m=managementOLRows();
+   if(!m){$("tl").innerHTML="<tbody><tr><td class=empty>OL retailer source not found for the selected TL.</td></tr></tbody>";return;}
+   const {result,sh,rid,rn}=m;
+   const ti=sh.headers.findIndex(h=>norm(h)===norm(t));
+   const ai=sh.headers.findIndex(h=>norm(h)===norm(a));
+   const vi=sh.headers.findIndex(h=>norm(h)===norm(v));
+   const map=new Map();
+   result.data.forEach(r=>{
+     const id=rid>=0?clean(r[rid]):"", name=rn>=0?clean(r[rn]):"";
+     const key=(id||name).replace(/\s+/g," ").trim().toLowerCase(); if(!key)return;
+     if(!map.has(key))map.set(key,{n:name||id,t:0,a:0,v:0});
+     const x=map.get(key);
+     x.t+=ti>=0?num(r[ti]):0;
+     x.a+=ai>=0?num(r[ai]):0;
+     x.v+=vi>=0?num(r[vi]):0;
+   });
+   const dd=window.__drr||{passed:1,remain:1};
+   const d=[...map.values()].map(x=>{x.p=x.a/(x.t||1);x.gap=Math.max(0,x.t-x.a);x.cd=dd.passed?x.a/dd.passed:0;x.rd=dd.remain?x.gap/dd.remain:0;return x}).sort((x,y)=>y.p-x.p);
+   $("tl").innerHTML="<thead><tr><th>Retailer</th><th>Target</th><th>Achievement</th><th>Ach %</th><th>Volume</th><th>Current DRR</th><th>Required DRR</th><th>Gap</th></tr></thead><tbody>"+
+     d.map(x=>`<tr><td><b>${esc(x.n)}</b></td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td><td>${x.v.toLocaleString("en-IN")}</td><td>${money(x.cd)}</td><td>${money(x.rd)}</td><td>${money(x.gap)}</td></tr>`).join("")+"</tbody>";
+   return;
+ }
+ // Original TL leaderboard for other levels.
+ let c=col("TL")||col("Team Lead");if(!c){$("tl").innerHTML="<tbody><tr><td class=empty>TL column not detected in this Excel.</td></tr></tbody>";return}
+ let d=group(filtered,c,[t,a,v]).map(x=>({n:x.key,t:x[t]||0,a:x[a]||0,v:x[v]||0,p:(x[a]||0)/(x[t]||1)})).sort((x,y)=>y.p-x.p);
+ let dd=window.__drr||{passed:1,remain:1};
+ $("tl").innerHTML="<thead><tr><th>TL</th><th>Target</th><th>Ach.</th><th>Ach %</th><th>Current DRR</th><th>Required DRR</th><th>Projection</th><th>Status</th></tr></thead><tbody>"+
+ d.map(x=>{let cd=dd.passed?x.a/dd.passed:0,rd=dd.remain?Math.max(0,x.t-x.a)/dd.remain:0,pr=x.a+cd*dd.remain;return `<tr><td><b>${esc(x.n)}</b></td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td><td>${money(cd)}</td><td>${money(rd)}</td><td>${money(pr)}</td><td>${pr>=x.t?"🟢 Ahead":"🔴 Gap"}</td></tr>`}).join("")+"</tbody>";
+}
+function employeeData(t,a,v){
+ // Employee Target/Achievement comes from the main Promoter Dump block.
+ // Volume is always reconciled from the same source by Emp ID/name + hierarchy,
+ // so duplicate product blocks or repeated retailer rows cannot zero-out volume.
+ const scope=getSelectedScope();
+ const pm=window.__sourceSheets?.[sourceSheetName("Promoter")];
+ const base=group(filtered,"Emp Name",[t,a]);
+ if(!pm?.headers?.length) return base.map(x=>({n:x.key,t:x[t]||0,a:x[a]||0,v:0,p:(x[a]||0)/(x[t]||1),gap:Math.max(0,(x[t]||0)-(x[a]||0))})).sort((x,y)=>y.p-x.p);
+ const ph=pm.headers, idxOf=label=>ph.findIndex(h=>norm(h)===norm(label));
+ const ei=idxOf("Emp Name"), eid=idxOf("Emp Mi ID")>=0?idxOf("Emp Mi ID"):idxOf("Emp ID"),
+       vi=idxOf("MTD ACH Volume (Overall)")>=0?idxOf("MTD ACH Volume (Overall)"):idxOf("MTD ACH Volume\n(Overall)");
+ const zi=idxOf("ZSM"), ci=idxOf("CH / CSM/KAM"), ti=idxOf("TL"), zonei=idxOf("Zone_1")>=0?idxOf("Zone_1"):idxOf("Zone"),
+       cityi=idxOf("City"), ri=idxOf("Retailer Name"), pi=idxOf("Parent_Code")>=0?idxOf("Parent_Code"):idxOf("Parent Code");
+ const same=(r,i,val)=>!val || (i>=0 && norm(r[i])===norm(val));
+ const byEmp=new Map();
+ (pm.rows||[]).forEach(r=>{
+   if(!same(r,zi,scope.zsm)||!same(r,ci,scope.csm)||!same(r,ti,scope.tl)||!same(r,zonei,scope.zone)||!same(r,cityi,scope.city)||!same(r,ri,scope.ret)||!same(r,pi,scope.parent)||!same(r,ei,scope.emp)) return;
+   const name=clean(ei>=0?r[ei]:""); if(!name)return;
+   const id=clean(eid>=0?r[eid]:""); const key=(id||norm(name)).toString().toLowerCase();
+   byEmp.set(key,{name,id,vol:(byEmp.get(key)?.vol||0)+(vi>=0?num(r[vi]):0)});
+ });
+ return base.map(x=>{
+   const match=[...byEmp.values()].find(e=>norm(e.name)===norm(x.key));
+   const vol=match?.vol||0;
+   return {n:x.key,t:x[t]||0,a:x[a]||0,v:vol,p:(x[a]||0)/(x[t]||1),gap:Math.max(0,(x[t]||0)-(x[a]||0))};
+ }).sort((x,y)=>y.p-x.p);
+}
+function retailerDataForManagement(t,a,v){
+ const result=sourceProductRows(sourceSheetName("OL"),getSelectedScope());
+ if(!result)return [];
+ const sh=window.__sourceSheets?.[result.sheetName];
+ if(!sh)return [];
+ const idxOf=label=>sh.headers.findIndex(h=>norm(h)===norm(label));
+ const rid=idxOf("Retailer ID"), rn=idxOf("Retailer Name");
+ const ti=idxOf(t), ai=idxOf(a), vi=idxOf(v);
+ if(rn<0||ti<0||ai<0)return [];
+ const m=new Map();
+ result.data.forEach(r=>{
+   const name=clean(r[rn]);
+   const id=rid>=0?clean(r[rid]):"";
+   // Retailer ID is not populated on every OL row. Never drop such retailers:
+   // use Retailer ID when present, otherwise the normalized retailer name.
+   const key=(id||name).replace(/\s+/g," ").trim().toLowerCase();
+   if(!key)return;
+   if(!m.has(key))m.set(key,{n:name||id,t:0,a:0,v:0});
+   const x=m.get(key); x.t+=num(r[ti]); x.a+=num(r[ai]); x.v+=num(r[vi]);
+ });
+
+ // IMPORTANT: OL is authoritative for retailer Target/Achievement, but its
+ // overall-volume field can be blank/0 for retailer rows. The actual unit
+ // volume is recorded at promoter level in Promoter Dump. Reconcile volume
+ // by Retailer ID/name from that source so Action Center / Retailer Ranking
+ // never displays a false 0 volume.
+ try{
+   const pm=window.__sourceSheets?.[sourceSheetName("Promoter")];
+   if(pm?.headers?.length){
+     const ph=pm.headers;
+     const pidxOf=(label)=>ph.findIndex(h=>norm(h)===norm(label));
+     const pr=pidxOf("Retailer Name"), pid=pidxOf("Retailer ID");
+     const pv=pidxOf("MTD ACH Volume (Overall)");
+     if(pr>=0 && pv>=0){
+       const pscope=getSelectedScope();
+       const pz=pidxOf("ZSM"), pc=pidxOf("CH / CSM/KAM"), pt=pidxOf("TL"), pe=pidxOf("Emp Name"), pzone=pidxOf("Zone"), pcity=pidxOf("City"), pparent=pidxOf("Parent_Code");
+       const same=(r,i,val)=>!val || (i>=0 && norm(r[i])===norm(val));
+       const volByRetailer=new Map();
+       (pm.rows||[]).forEach(r=>{
+         if(!same(r,pz,pscope.zsm)||!same(r,pc,pscope.csm)||!same(r,pt,pscope.tl)||!same(r,pe,pscope.emp)||!same(r,pzone,pscope.zone)||!same(r,pcity,pscope.city)||!same(r,pparent,pscope.parent)||!same(r,pr,pscope.ret)) return;
+         const name=clean(r[pr]), id=pid>=0?clean(r[pid]):"";
+         const key=(id||name).replace(/\s+/g," ").trim().toLowerCase();
+         if(!key)return;
+         volByRetailer.set(key,(volByRetailer.get(key)||0)+num(r[pv]));
+       });
+       m.forEach(x=>{
+         const key=x.n.replace(/\s+/g," ").trim().toLowerCase();
+         if(volByRetailer.has(key)) x.v=volByRetailer.get(key);
+       });
+       if(pid>=0){
+         // Name-based reconciliation above is the normal path. If an OL row
+         // has an ID/name variation, also match by retailer ID.
+         const idByRetailer=new Map();
+         (pm.rows||[]).forEach(r=>{
+           if(!same(r,pz,pscope.zsm)||!same(r,pc,pscope.csm)||!same(r,pt,pscope.tl)||!same(r,pe,pscope.emp)||!same(r,pzone,pscope.zone)||!same(r,pcity,pscope.city)||!same(r,pparent,pscope.parent)||!same(r,pr,pscope.ret)) return;
+           const id=clean(r[pid]); if(!id)return;
+           idByRetailer.set(id,(idByRetailer.get(id)||0)+num(r[pv]));
+         });
+         result.data.forEach(r=>{
+           const id=rid>=0?clean(r[rid]):"";
+           const key=(id||clean(r[rn])).replace(/\s+/g," ").trim().toLowerCase();
+           if(id && idByRetailer.has(id) && m.has(key)) m.get(key).v=idByRetailer.get(id);
+         });
+       }
+     }
+   }
+ }catch(e){ console.warn("Retailer volume reconciliation skipped",e); }
+
+ return [...m.values()].map(x=>({...x,p:x.a/(x.t||1),gap:Math.max(0,x.t-x.a)})).sort((x,y)=>y.p-x.p);
+}
+function managementPerformanceData(t,a,v){
+ return isRetailerScope() ? retailerDataForManagement(t,a,v) : employeeData(t,a,v);
+}
+function renderPerf(t,a,v){
+ const isRetailMode=(activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode");
+ if($("rankingTitle"))$("rankingTitle").textContent=isRetailMode?"🏪 Retailer Ranking":"🏆 Employee Ranking";
+ if($("rankingSubtitle"))$("rankingSubtitle").textContent=isRetailMode?"Top retailer performers":"Top performers";
+ if($("heatmapTitle"))$("heatmapTitle").textContent=isRetailMode?"📈 Retailer Achievement Heatmap":"📈 Achievement Heatmap";
+ if($("heatmapSubtitle"))$("heatmapSubtitle").textContent="Higher is better";
+
+ let d=managementPerformanceData(t,a,v);
+ let entity=isRetailerScope()?"Retailer":"Employee";
+ $("perf").innerHTML="<thead><tr><th>"+entity+"</th><th>Target</th><th>Ach.</th><th>Ach %</th><th>Volume</th></tr></thead><tbody>"+
+ d.map(x=>`<tr><td><b>${esc(x.n)}</b></td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td><td>${x.v}</td></tr>`).join("")+"</tbody>";
+ let top=d.slice(0,12),mx=Math.max(...top.map(x=>x.p),.01);
+ $("bars").innerHTML=top.map(x=>`<div class=barrow><span>${esc(x.n.slice(0,18))}</span><div class=bar><i style="width:${Math.min(100,x.p/mx*100)}%"></i></div><b>${pct(x.p)}</b></div>`).join("");
+ $("top5").innerHTML=top.slice(0,5).map(x=>`<div class=alert><b>🏆 ${esc(x.n)}</b><span class=mini>${money(x.a)} • ${pct(x.p)}</span></div>`).join("");
+ $("bottom5").innerHTML=d.slice(-5).reverse().map(x=>`<div class=alert><b>⚠️ ${esc(x.n)}</b><span class=mini>${money(x.a)} • ${pct(x.p)}</span></div>`).join("");
+ $("gap5").innerHTML=[...d].sort((x,y)=>y.gap-x.gap).slice(0,5).map(x=>`<div class=alert><b>${esc(x.n)}</b><span class=mini>Gap ${money(x.gap)}</span></div>`).join("");
+
+}
+
+function renderActions(t,a,v,nt,na){
+ let d=managementPerformanceData(t,a,v),entity=(activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode")?"retailers":"employees";
+ let low=d.filter(x=>x.p<.3),zero=d.filter(x=>Number(x.v||0)===0),top=d.slice().sort((x,y)=>y.p-x.p)[0];
+ // Zero Volume is a real zero only when the source-of-truth volume is numeric 0.
+ // Missing/blank source values are labelled separately instead of being treated as zero.
+ const missingVol=d.filter(x=>x.v===null || x.v===undefined);
+ $("actions").innerHTML=`<div class="alert action-click" role="button" tabindex="0" data-action-detail="low30" aria-label="View details of records below 30 percent achievement">
+   <b>🔴 Attention Required</b>
+   <span class="mini">${low.length} ${entity} below 30% achievement • Tap to view details</span>
+ </div>
+ <div class="alert action-click" role="button" tabindex="0" data-action-detail="zeroVolume" aria-label="View zero volume details">
+   <b>📦 Zero Volume</b><span class="mini">${zero.length} ${entity} with confirmed 0 volume • Tap to view details</span>
+ </div>
+ <div class="alert action-click" role="button" tabindex="0" data-action-detail="leader" aria-label="View current leader details">
+   <b>🏆 Current Leader</b><span class="mini">${top?esc(top.n)+" • "+pct(top.p):"—"} • Tap to view details</span>
+ </div>
+ <div class="alert action-click" role="button" tabindex="0" data-action-detail="focusGap" aria-label="View focus gap details">
+   <b>🎯 Focus Gap</b><span class="mini">Largest ${entity} gaps are shown below • Tap to view details</span>
+ </div>`;
+}
+function excelColToIndex(s){let n=0;for(const ch of s){n=n*26+(ch.charCodeAt(0)-64)}return n-1}
+function norm(v){return clean(v).replace(/\s+/g," ").trim().toLocaleLowerCase()}
+function sourceSheetName(kind){
+ if(kind==="ZSM")return Object.keys(window.__sourceSheets||{}).find(x=>norm(x)==="zsm");
+ if(kind==="TL")return Object.keys(window.__sourceSheets||{}).find(x=>norm(x)==="tl");
+ if(kind==="OL")return Object.keys(window.__sourceSheets||{}).find(x=>norm(x)==="ol");
+ if(kind==="Promoter")return Object.keys(window.__sourceSheets||{}).find(x=>norm(x)==="promoter dump");
+ return null;
+}
+function getSelectedScope(){
+ let sel=getSelectedFilters();
+ return {csm:sel["CSM"]||"",zsm:sel["ZSM"]||"",zone:sel["Zone"]||"",tl:sel["TL"]||"",city:sel["City"]||"",emp:sel["Emp Name"]||"",ret:sel["Retailer Name"]||"",parent:sel["Parent Code"]||""};
+}
+function sourceProductRows(sheetName,scope){
+ const sh=window.__sourceSheets?.[sheetName];
+ if(!sh||!sh.headers||sh.prodStart<0||sh.prodEnd<sh.prodStart)return null;
+
+ // IMPORTANT: Product names repeat later in the sheet (stock / duck promoter blocks).
+ // Therefore use COLUMN INDEXES, not an object keyed by header name.
+ const products=sh.headers.slice(sh.prodStart,sh.prodEnd+1).map(x=>clean(x));
+ let data=sh.rows||[];
+ const idxOf=(label)=>{
+   const target=norm(label);
+   for(let i=0;i<sh.headers.length;i++) if(norm(sh.headers[i])===target)return i;
+   return -1;
+ };
+ const idx={
+   csm:idxOf("CH / CSM/KAM"),
+   zsm:idxOf("ZSM"),
+   zone:idxOf("Zone"),
+   tl:idxOf("TL"),
+   city:idxOf("City"),
+   emp:idxOf("Emp Name"),
+   ret:idxOf("Retailer Name")
+ };
+ const val=(r,i)=>i>=0?norm(r[i]):"";
+ const eq=(arr,i,v)=>i>=0&&v?arr.filter(r=>val(r,i)===norm(v)):arr;
+
+ const lname=norm(sheetName);
+ if(lname==="zsm"){
+   data=eq(data,idx.zsm,scope.zsm);
+ }else if(lname==="tl"){
+   data=eq(data,idx.tl,scope.tl);
+ }else if(lname==="promoter dump"){
+   // Promoter Dump hierarchy:
+   // Emp Name -> TL -> ZSM -> CSM -> Zone -> City -> Retailer.
+   // IMPORTANT: if the Promoter tab is filtered by TL/ZSM/etc., apply that
+   // filter to the promoter rows. Previously only Emp Name was applied,
+   // which caused a selected TL (e.g. TAUSIF SAFIK SHAIKH) to fall back
+   // to all 1,305 promoters.
+   const pm=window.__promoterMain;
+   if(pm && pm.aoa){
+     const raw=pm.aoa.slice(pm.headerRow+1);
+     const pidx={
+       emp:pm.empCol,
+       tl:pm.tlCol,
+       zsm:pm.zsmCol,
+       csm:pm.csmCol,
+       zone:headers.findIndex(h=>norm(h)==="zone"),
+       city:headers.findIndex(h=>norm(h)==="city"),
+       ret:headers.findIndex(h=>norm(h)==="retailer name")
+     };
+     data=raw.filter(r=>{
+       const match=(i,v)=>!v || (i>=0 && norm(r[i])===norm(v));
+       return match(pidx.emp,scope.emp) &&
+              match(pidx.tl,scope.tl) &&
+              match(pidx.zsm,scope.zsm) &&
+              match(pidx.csm,scope.csm) &&
+              match(pidx.zone,scope.zone) &&
+              match(pidx.city,scope.city) &&
+              match(pidx.ret,scope.ret);
+     });
+   } else {
+     data=eq(data,idx.emp,scope.emp);
+     data=eq(data,idx.tl,scope.tl);
+     data=eq(data,idx.zsm,scope.zsm);
+     data=eq(data,idx.zone,scope.zone);
+     data=eq(data,idx.city,scope.city);
+     data=eq(data,idx.ret,scope.ret);
+   }
+ }else if(lname==="ol"){
+   // OL is the retailer/product source. For a hierarchy selection, the
+   // authoritative retailer membership comes from Promoter Dump mapping.
+   // This is especially important for TL: the OL sheet can contain retailer
+   // rows without a reliable TL value, so filtering OL.TL alone can leak
+   // retailers belonging to another TL.
+   const pidx=idxOf("Parent_Code");
+   if(scope.parent && pidx>=0){
+     data=eq(data,pidx,scope.parent);
+   }else if(scope.ret){
+     data=eq(data,idx.ret,scope.ret);
+   }else if(scope.tl || scope.zsm || scope.csm || scope.zone || scope.city){
+     // First apply any direct OL hierarchy columns that are present.
+     data=eq(data,idx.csm,scope.csm);
+     data=eq(data,idx.zsm,scope.zsm);
+     data=eq(data,idx.zone,scope.zone);
+     data=eq(data,idx.tl,scope.tl);
+     data=eq(data,idx.city,scope.city);
+
+     // Then, when TL is selected, intersect with the exact retailer set from
+     // Promoter Dump. This prevents unrelated retailers from leaking into
+     // Product Sellout Matrix / retailer-management sections.
+     if(scope.tl){
+       const pm=window.__promoterMain;
+       if(pm?.aoa){
+         const ph=pm.aoa[pm.headerRow]||[], raw=pm.aoa.slice(pm.headerRow+1);
+         const findH=(label)=>ph.findIndex(h=>norm(h)===norm(label));
+         const pi={tl:pm.tlCol,zsm:pm.zsmCol,csm:pm.csmCol,zone:findH("Zone"),city:findH("City"),emp:pm.empCol,ret:findH("Retailer Name"),rid:findH("Retailer ID"),parent:findH("Parent_Code")};
+         const match=(r,i,v)=>!v || (i>=0 && norm(r[i])===norm(v));
+         const names=new Set(), ids=new Set();
+         raw.forEach(r=>{
+           if(!match(r,pi.tl,scope.tl)||!match(r,pi.zsm,scope.zsm)||!match(r,pi.csm,scope.csm)||!match(r,pi.zone,scope.zone)||!match(r,pi.city,scope.city)||!match(r,pi.parent,scope.parent)) return;
+           const n=pi.ret>=0?norm(r[pi.ret]):"", id=pi.rid>=0?norm(r[pi.rid]):"";
+           if(n) names.add(n); if(id) ids.add(id);
+         });
+         const olRid=idxOf("Retailer ID");
+         // If mapping exists but contains no retailers, fail closed rather
+         // than showing the entire OL sheet.
+         if(names.size || ids.size){
+           data=data.filter(r=>{
+             const n=idx.ret>=0?norm(r[idx.ret]):"", id=olRid>=0?norm(r[olRid]):"";
+             return (n && names.has(n)) || (id && ids.has(id));
+           });
+         }else{
+           data=[];
+         }
+       }
+     }
+   }
+ }
+
+ const values=products.map((p,j)=>({
+   p,
+   units:data.reduce((s,r)=>s+num(r[sh.prodStart+j]),0)
+ })).filter(x=>x.p);
+
+ return {sheetName,products,data,values};
+}
+function renderProductIntelligence(){
+ const scope=getSelectedScope();
+ let result=null,mode="Overall";
+ if(activeLevel==="Promoter"){result=sourceProductRows(sourceSheetName("Promoter"),scope);mode="Promoter Dump";}
+ else if(activeLevel==="TL"){result=sourceProductRows(sourceSheetName("TL"),scope);mode="TL / Official TL Sheet";}
+ else if(activeLevel==="ZSM"){result=sourceProductRows(sourceSheetName("ZSM"),scope);mode="ZSM / Official ZSM Sheet";}
+ else {result=sourceProductRows(sourceSheetName("OL"),scope);mode=activeLevel==="ParentCode"?"Parent Code / OL Retailer":scope.tl?"TL / OL Retailer":"CSM / OL Retailer";}
+ if(!result){
+   $("productLead").innerHTML="<tbody><tr><td class=empty>Official All Models MTD SO source not found.</td></tr></tbody>";
+   return;
+ }
+
+ const sh=window.__sourceSheets?.[result.sheetName];
+ const totalIdx=sh?.headers?.findIndex(h=>norm(h)==="total so");
+ const productRows=result.values.filter(x=>x.units>0).sort((x,y)=>y.units-x.units);
+ let productTotal=productRows.reduce((s,x)=>s+x.units,0);
+ let authoritativeTotal=productTotal;
+
+ // For ZSM/CSM, Total SO is the source-of-truth. Product columns are only
+ // the model breakdown and can be short by a few units when a row/model is
+ // not mapped into the visible product block.
+ if(isRetailerScope() && totalIdx>=0){
+   authoritativeTotal=result.data.reduce((s,r)=>s+num(r[totalIdx]),0);
+   const unmapped=Math.max(0,authoritativeTotal-productTotal);
+   if(unmapped>0) productRows.push({p:"Unmapped / Other",units:unmapped});
+ }
+
+ const total=authoritativeTotal;
+ $("productLead").innerHTML=
+  `<thead><tr><th>Product / Sellout</th><th>Units</th><th>Mix %</th></tr></thead><tbody>`+
+  productRows.map(x=>`<tr><td><b>${esc(x.p)}</b></td><td>${x.units.toLocaleString("en-IN")}</td><td>${total?pct(x.units/total):"0%"}</td></tr>`).join("")+
+  `</tbody><tfoot><tr><th>Total Sellout</th><th>${total.toLocaleString("en-IN")}</th><th>100%</th></tr></tfoot>`;
+
+ const info=document.querySelector("#productLead")?.closest(".card");
+ if(info){
+   let note=info.querySelector(".product-source-note");
+   if(!note){note=document.createElement("div");note.className="mini product-source-note";info.insertBefore(note,info.querySelector(".tablewrap"));}
+   note.innerHTML=`Source: <b>${esc(result.sheetName)}</b> • Header: <b>All Models MTD SO / Product block</b> • Total source: <b>Total SO</b> • Product block: <b>${esc(result.products[0]||"")} → ${esc(result.products[result.products.length-1]||"")}</b> • <b>${result.data.length}</b> source row(s) • Mode: <b>${esc(mode)}</b> • <b>TOTAL-SO RECONCILED</b>`;
+ }
+}
+function managementOLRows(){
+ const scope=getSelectedScope(), result=sourceProductRows(sourceSheetName("OL"),scope);
+ if(!result)return null;
+ const sh=window.__sourceSheets?.[result.sheetName]; if(!sh)return null;
+ const idxOf=label=>sh.headers.findIndex(h=>norm(h)===norm(label));
+ const rid=idxOf("Retailer ID"), rn=idxOf("Retailer Name");
+ // TL retailer membership is already enforced by sourceProductRows()
+ // using the Promoter Dump -> retailer mapping. Do not re-filter here with
+ // a second, potentially inconsistent mapping.
+ return {result,sh,rid,rn};
+}
+function renderProducts(){
+ if(isRetailerScope() || activeLevel==="TL"){
+   const m=managementOLRows();
+   if(!m){$("products").innerHTML="<tbody><tr><td class=empty>OL retailer source not found</td></tr></tbody>";return;}
+   const {result,sh,rid,rn}=m, ps=result.products.filter(Boolean);
+   const totalIdx=sh.headers.findIndex(h=>norm(h)==="total so");
+   const groups=new Map();
+   result.data.forEach(r=>{
+     const id=rid>=0?clean(r[rid]):"", name=rn>=0?clean(r[rn]):"";
+     if(!id&&!name)return;
+     const key=id||name;
+     if(!groups.has(key))groups.set(key,{n:name||id,vals:{},total:0,productTotal:0});
+     const g=groups.get(key);
+     ps.forEach((p,j)=>{const val=num(r[sh.prodStart+j]);g.vals[p]=(g.vals[p]||0)+val;g.productTotal+=val;});
+     if(totalIdx>=0)g.total+=num(r[totalIdx]); else g.total=g.productTotal;
+   });
+   const d=[...groups.values()].map(g=>{
+     const gap=Math.max(0,g.total-g.productTotal);
+     if(gap>0)g.vals["Unmapped / Other"]=(g.vals["Unmapped / Other"]||0)+gap;
+     return g;
+   }).sort((a,b)=>b.total-a.total).slice(0,100);
+   const displayProducts=[...ps,...(d.some(x=>x.vals["Unmapped / Other"]) ? ["Unmapped / Other"] : [])];
+   $("products").innerHTML="<thead><tr><th>Retailer</th>"+displayProducts.map(p=>`<th>${esc(p)}</th>`).join("")+"<th>Total SO</th></tr></thead><tbody>"+
+    d.map(x=>`<tr><td><b>${esc(x.n)}</b></td>${displayProducts.map(p=>`<td>${x.vals[p]||0}</td>`).join("")}<td><b>${x.total}</b></td></tr>`).join("")+
+    "</tbody>";
+   const card=$("products").closest(".card"); if(card)card.querySelector(".sectionhead span").textContent="Retailer × Product • All Models MTD SO • Total SO reconciled";
+   return;
+ }
+ let s=headers.findIndex(h=>h==="Redmi A5"),e=headers.findIndex((h,i)=>i>s&&h==="Total SO");if(s<0)return;
+ let ps=headers.slice(s,e>s?e:s+1).filter(Boolean),d=group(filtered,"Emp Name",ps).map(x=>({n:x.key,...Object.fromEntries(ps.map(p=>[p,x[p]||0])),total:ps.reduce((z,p)=>z+(x[p]||0),0)})).sort((x,y)=>y.total-x.total);
+ $("products").innerHTML="<thead><tr><th>Employee</th>"+ps.map(p=>`<th>${esc(p)}</th>`).join("")+"<th>Total</th></tr></thead><tbody>"+d.map(x=>`<tr><td><b>${esc(x.n)}</b></td>${ps.map(p=>`<td>${x[p]}</td>`).join("")}<td><b>${x.total}</b></td></tr>`).join("")+"</tbody>";
+}
+function renderNotes(nt,na){
+ if(activeLevel==="ZSM"||activeLevel==="CSM"||activeLevel==="ParentCode"){
+   const m=managementOLRows();
+   if(!m){$("notes").innerHTML="<tbody><tr><td class=empty>OL retailer source not found</td></tr></tbody>";return;}
+   const {result,sh,rid,rn}=m;
+   const targetCandidates=["Note Series Target (Value)","Note Series Target"];
+   const achCandidates=["RN14 RN15 RN17 Series Ach (Value)","RN14 RN15 RN17 Series Ach"];
+   const ti=targetCandidates.map(x=>sh.headers.findIndex(h=>norm(h)===norm(x))).find(i=>i>=0);
+   const ai=achCandidates.map(x=>sh.headers.findIndex(h=>norm(h)===norm(x))).find(i=>i>=0);
+   if(ti==null||ai==null){$("notes").innerHTML="<tbody><tr><td class=empty>Note Series columns not detected in OL</td></tr></tbody>";return;}
+   const map=new Map();
+   result.data.forEach(r=>{
+     const id=rid>=0?clean(r[rid]):"", name=rn>=0?clean(r[rn]):"";
+     const key=id||name;if(!key)return;
+     if(!map.has(key))map.set(key,{n:name||id,t:0,a:0});
+     const x=map.get(key);x.t+=num(r[ti]);x.a+=num(r[ai]);
+   });
+   const d=[...map.values()].map(x=>({...x,p:x.a/(x.t||1)})).sort((x,y)=>y.p-x.p);
+   $("notes").innerHTML="<thead><tr><th>Retailer</th><th>Target</th><th>Achievement</th><th>Ach %</th></tr></thead><tbody>"+d.map(x=>`<tr><td>${esc(x.n)}</td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td></tr>`).join("")+"</tbody>";
+   const card=$("notes").closest(".card"); if(card)card.querySelector(".sectionhead h2").textContent="📝 Note Series Retailer Performance";
+   return;
+ }
+ if(!nt||!na){$("notes").innerHTML="<tbody><tr><td class=empty>Note Series columns not detected</td></tr></tbody>";return}
+ let d=group(filtered,"Emp Name",[nt,na]).map(x=>({n:x.key,t:x[nt]||0,a:x[na]||0,p:(x[na]||0)/(x[nt]||1)})).sort((x,y)=>y.p-x.p);
+ $("notes").innerHTML="<thead><tr><th>Employee</th><th>Target</th><th>Achievement</th><th>Ach %</th></tr></thead><tbody>"+d.map(x=>`<tr><td>${esc(x.n)}</td><td>${money(x.t)}</td><td>${money(x.a)}</td><td>${badge(x.p)}</td></tr>`).join("")+"</tbody>";
+}
+$("download").onclick=()=>{let aoa=[headers,...filtered.map(r=>headers.map(h=>r[h]??""))],wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),"Filtered Data");XLSX.writeFile(wb,"TAUSIF_Sales_Dashboard_Filtered.xlsx")}
+</script>
+</body></html>
